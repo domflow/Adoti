@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>DotPipe — NLP + Git CLI + Commands Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #0d1428;
+      --panel: #0e1730;
+      --line: #172036;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #3b82f6;
+      --good: #22c55e;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 10px
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(0deg, #0b1020, #0d1428)
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: .2px
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 320px 1fr 400px;
+      gap: 10px;
+      padding: 10px
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 6px 22px rgba(0, 0, 0, .3);
+      padding: 10px
+    }
+
+    .section-title {
+      font-weight: 700;
+      margin-bottom: 8px
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center
+    }
+
+    .col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .btn {
+      padding: 7px 10px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer
+    }
+
+    .btn.alt {
+      border-color: #64748b;
+      background: #1f2937
+    }
+
+    .btn.good {
+      border-color: var(--good);
+      background: var(--good)
+    }
+
+    .btn.warn {
+      border-color: var(--warn);
+      background: var(--warn)
+    }
+
+    .btn.bad {
+      border-color: var(--bad);
+      background: var(--bad)
+    }
+
+    .btn:disabled {
+      opacity: .6;
+      cursor: not-allowed
+    }
+
+    .inp,
+    .sel {
+      width: 100%;
+      padding: 9px 10px;
+      border: 1px solid #334155;
+      background: #0b1226;
+      color: var(--text);
+      border-radius: 8px
+    }
+
+    .panel {
+      min-height: 280px;
+      background: var(--panel);
+      border: 1px dashed #1e293b;
+      border-radius: 10px;
+      padding: 12px;
+      overflow: auto
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word
+    }
+
+    .muted {
+      color: var(--muted)
+    }
+
+    .hr {
+      height: 1px;
+      background: #1e293b;
+      margin: 8px 0
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px
+    }
+
+    .chip {
+      background: #0b1226;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      border-radius: 999px;
+      padding: 5px 8px;
+      cursor: pointer;
+      font: 12px ui-monospace, Menlo, Consolas
+    }
+
+    .chip:hover {
+      background: #0f172a
+    }
+
+    .kvs {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6px
+    }
+
+    .tag {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      padding: 2px 8px;
+      border: 1px solid #334155;
+      border-radius: 999px;
+      color: #cbd5e1;
+      font-size: 12px
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 8px 10px;
+      background: linear-gradient(0deg, #0d1428, #0b1020)
+    }
+
+    .cli {
+      display: flex;
+      gap: 8px;
+      align-items: center
+    }
+
+    .prompt {
+      color: #60a5fa;
+      font: 13px/1.4 ui-monospace, Menlo, Consolas
+    }
+
+    .cli-inp {
+      flex: 1;
+      background: #0b1226;
+      color: #e5e7eb;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 8px;
+      outline: none;
+      font: 13px/1.4 ui-monospace, Menlo, Consolas
+    }
+
+    .cli-out {
+      max-height: 140px;
+      overflow: auto;
+      margin-top: 8px;
+      padding: 8px;
+      background: #0b1226;
+      border: 1px solid #1e293b;
+      border-radius: 8px
+    }
+
+    code.small {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: #cbd5e1
+    }
+  </style>
+  <script src="dotpipe.js"></script>
+  <script>
+    (function bindDotPipeGlobals() {
+      try {
+        if (typeof window.modala !== 'function' && typeof modala === 'function') window.modala = modala;
+        if (typeof window.modal !== 'function' && typeof modal === 'function') window.modal = modal;
+        if (typeof window.pipes !== 'function' && typeof pipes === 'function') window.pipes = pipes;
+        if (typeof window.domContentLoad !== 'function' && typeof domContentLoad === 'function') window.domContentLoad = domContentLoad;
+      } catch (e) { }
+    })();
+  </script>
+  <script>
+    // 1) A trivial view
+    const v = { tagname:'div', id:'sanity', 0:{ tagname:'div', textContent:'Hello from renderer' } };
+    // 2) Try modala(), else fallback
+    if (typeof window.safeRender === 'function') safeRender(v, 'centerContent');
+    else if (typeof window.modala === 'function') window.modala(v, 'centerContent');
+    else console.warn('No renderer available');
+
+    // Basic payload → DOM renderer (fallback)
+    function renderBasic(node, parent) {
+      if (!node || typeof node !== 'object') return;
+      const tag = (node.tagname || node.tagName || 'div').toString();
+      const el = document.createElement(tag);
+
+      // Apply nested attributes:{} and base-level attrs
+      const attrs = { ...(node.attributes || {}) };
+      for (const [k, v] of Object.entries(node)) {
+        if (/^\d+$/.test(k)) continue;
+        if (['tagname', 'tagName', 'textContent', 'innerHTML', 'innerText', 'attributes', 'header'].includes(k)) continue;
+        attrs[k] = v;
+      }
+      Object.entries(attrs).forEach(([k, v]) => {
+        if (v === true) el.setAttribute(k, '');
+        else if (v !== false && v != null) el.setAttribute(k, String(v));
+      });
+
+      if ('textContent' in node) el.textContent = String(node.textContent);
+      if ('innerHTML' in node) el.innerHTML = String(node.innerHTML);
+      if ('innerText' in node) el.innerText = String(node.innerText);
+
+      // Children (numeric keys)
+      Object.keys(node).forEach(k => {
+        if (/^\d+$/.test(k) && node[k] && typeof node[k] === 'object') {
+          renderBasic(node[k], el);
+        }
+      });
+
+      parent.appendChild(el);
+    }
+
+    // Safe render wrapper (uses modala if present; otherwise basic)
+    function safeRender(view, targetId = 'centerContent') {
+      const target = typeof targetId === 'string' ? document.getElementById(targetId) : targetId;
+      if (!target) return console.warn('Preview target not found:', targetId);
+      target.innerHTML = '';
+
+      // Try modala first
+      try {
+        if (typeof window.modala === 'function') {
+          window.modala(view, targetId);
+          return;
+        }
+      } catch (e) {
+        console.warn('modala threw:', e);
+      }
+
+      // Fallback: basic render
+      try {
+        // Ensure attributes:{} applied to the tree (like your preprocess step)
+        (function preprocess(n) {
+          if (!n || typeof n !== 'object') return;
+          const a = n.attributes;
+          if (a && typeof a === 'object' && !Array.isArray(a)) {
+            for (const [k, v] of Object.entries(a)) { if (!(k in n)) n[k] = v; }
+          }
+          Object.keys(n).forEach(k => /^\d+$/.test(k) && preprocess(n[k]));
+        })(view);
+
+        renderBasic(view, target);
+      } catch (e) {
+        target.textContent = 'Render failed (no modala and fallback errored). Check console.';
+        console.error(e);
+      }
+    }
+  </script>
+
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">DotPipe — NLP + Git CLI + Commands</div>
+      <div class="hint" id="status">ready</div>
+    </header>
+
+    <main>
+      <!-- Left: Panel of Commands -->
+      <section class="card col">
+        <div class="section-title">Panel of Commands</div>
+
+        <div class="muted">Repo</div>
+        <div class="chips" id="repoChips"></div>
+
+        <div class="muted">Create / NLP</div>
+        <div class="chips" id="nlpChips"></div>
+
+        <div class="muted">Class / Style</div>
+        <div class="chips" id="classChips"></div>
+        <div class="chips" id="styleChips" style="margin-top:4px;"></div>
+
+        <div class="muted">Attributes</div>
+        <div class="chips" id="attrChips"></div>
+
+        <div class="muted">Render / Show</div>
+        <div class="chips" id="renderChips"></div>
+
+        <div class="hr"></div>
+        <div class="row">
+          <input id="quickTarget" class="inp" placeholder="target id (for insert or render)" />
+          <button id="renderBtn" class="btn alt">Render</button>
+        </div>
+      </section>
+
+      <!-- Center: Preview -->
+      <section class="card">
+        <div class="row" style="justify-content:space-between;">
+          <div class="section-title">Preview (modala)</div>
+          <div class="tag">No implicit <pipe>
+          </div>
+        </div>
+        <div id="centerContent" class="panel">
+          <div class="muted">Use the CLI or Panel to stage/commit and “Render”.</div>
+        </div>
+      </section>
+
+      <!-- Right: Inspector -->
+      <section class="card col">
+        <div class="section-title">Working Payload</div>
+        <div class="panel">
+          <pre id="payloadPre" class="code small"></pre>
+        </div>
+        <div class="section-title">Staged Delta (index)</div>
+        <div class="panel">
+          <pre id="indexPre" class="code small"></pre>
+        </div>
+        <div class="section-title">Log</div>
+        <div class="panel">
+          <pre id="logPre" class="code small"></pre>
+        </div>
+        <div class="section-title">Diff (HEAD vs parent)</div>
+        <div class="panel">
+          <pre id="diffPre" class="code small"></pre>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom: CLI -->
+    <footer>
+      <div class="cli">
+        <div class="prompt">nlp-git></div>
+        <input id="cliInput" class="cli-inp"
+          placeholder='e.g., new div tag "Hello" attributes:{id:hero, class:"box"}' />
+        <button id="cliRun" class="btn">Run</button>
+        <button id="cliCommit" class="btn good">Commit</button>
+        <button id="cliRender" class="btn alt">Render</button>
+      </div>
+      <div id="cliOut" class="cli-out"></div>
+    </footer>
+  </div>
+
+  <script>
+    (function (global) {
+      'use strict';
+
+      // Ensure modala/pipes on window
+      (function bindDotPipeGlobals() {
+        try {
+          if (typeof global.modala !== 'function' && typeof modala === 'function') global.modala = modala;
+          if (typeof global.modal !== 'function' && typeof modal === 'function') global.modal = modal;
+          if (typeof global.pipes !== 'function' && typeof pipes === 'function') global.pipes = pipes;
+          if (typeof global.domContentLoad !== 'function' && typeof domContentLoad === 'function') global.domContentLoad = domContentLoad;
+        } catch (e) { }
+      })();
+
+      // Apply nested attributes:{} to nodes before calling modala()
+      function applyAttributesToNode(node) {
+        const attrs = node && node.attributes;
+        if (attrs && typeof attrs === 'object' && !Array.isArray(attrs)) {
+          for (const [k, v] of Object.entries(attrs)) { if (!(k in node)) node[k] = v; }
+        }
+      }
+      function preprocessView(node) {
+        if (!node || typeof node !== 'object') return;
+        applyAttributesToNode(node);
+        Object.keys(node).forEach(k => /^\d+$/.test(k) && preprocessView(node[k]));
+      }
+
+      // Utils
+      const genId = (p = 'id') => p + '-' + Math.random().toString(36).slice(2, 8);
+      const deepClone = x => JSON.parse(JSON.stringify(x || null));
+      const nowIso = () => new Date().toISOString();
+      const lower = s => (s || '').toLowerCase();
+      const trim = s => String(s || '').trim();
+
+      // class/style helpers
+      function mergeClass(base, add) { const set = new Set(String(base || '').split(/\s+/).filter(Boolean)); String(add || '').split(/\s+/).filter(Boolean).forEach(c => set.add(c)); return Array.from(set).join(' '); }
+      function removeClassTokens(base, rm) { const set = new Set(String(base || '').split(/\s+/).filter(Boolean)); String(rm || '').split(/\s+/).filter(Boolean).forEach(c => set.delete(c)); return Array.from(set).join(' '); }
+      function replaceClassToken(base, a, b) { const out = String(base || '').split(/\s+/).filter(Boolean).map(t => t === a ? b : t); return Array.from(new Set(out)).join(' '); }
+      function toggleClassTokens(base, toggles) { const set = new Set(String(base || '').split(/\s+/).filter(Boolean)); String(toggles || '').split(/\s+/).filter(Boolean).forEach(c => set.has(c) ? set.delete(c) : set.add(c)); return Array.from(set).join(' '); }
+      function parseStyle(s) { const out = {}; String(s || '').split(';').map(x => x.trim()).filter(Boolean).forEach(r => { const i = r.indexOf(':'); if (i === -1) return; const k = r.slice(0, i).trim(); const v = r.slice(i + 1).trim(); if (k) out[k] = v; }); return out; }
+      function serializeStyle(o) { return Object.entries(o).map(([k, v]) => `${k}: ${v}`).join('; '); }
+      function mergeStyle(base, add) { const a = parseStyle(base), b = parseStyle(add); Object.assign(a, b); return serializeStyle(a); }
+
+      // attribute merge
+      function mergeAttributes(base = {}, delta = {}, options = {}) {
+        const out = { ...(base || {}) };
+        const { classMode = 'merge', overwrite = false } = options;
+        if (delta.style != null) out.style = mergeStyle(out.style, delta.style);
+        if (delta.class != null) out.class = classMode === 'replace' ? String(delta.class) : mergeClass(out.class, delta.class);
+        if (delta.classAdd) out.class = mergeClass(out.class, delta.classAdd);
+        if (delta.classRemove) out.class = removeClassTokens(out.class, delta.classRemove);
+        if (delta.classToggle) out.class = toggleClassTokens(out.class, delta.classToggle);
+        if (Array.isArray(delta.classReplace)) delta.classReplace.forEach(([a, b]) => { if (a && b) out.class = replaceClassToken(out.class, a, b); });
+        if (delta.classSetExactly != null) out.class = String(delta.classSetExactly);
+        Object.entries(delta).forEach(([k, v]) => {
+          if (v == null) return;
+          if (/^class(?:Add|Remove|Replace|Toggle|SetExactly)?$/i.test(k)) return;
+          if (k === 'style') return;
+          if (!overwrite && k in out) return;
+          out[k] = v;
+        });
+        if (out.class != null && !String(out.class).trim()) delete out.class;
+        if (out.style != null && !String(out.style).trim()) delete out.style;
+        return out;
+      }
+
+      function normalizeAnchorAjax(payload) {
+        if (!payload || lower(payload.tagname) !== 'a') return payload;
+        const a = payload.attributes || {};
+        if (a.ajax) { a.href = a.ajax; delete a.ajax; }
+        payload.attributes = a;
+        return payload;
+      }
+      function mergePayload(base = {}, delta = {}, options = {}) {
+        const result = { ...(base || {}) };
+        const mergedAttrs = mergeAttributes(base.attributes || {}, { ...(delta.attributes || {}), class: delta.class, classAdd: delta.classAdd, classRemove: delta.classRemove, classReplace: delta.classReplace, classToggle: delta.classToggle, classSetExactly: delta.classSetExactly, style: delta.style }, options);
+        result.attributes = mergedAttrs;
+        if (delta.hasOwnProperty('textContent')) result.textContent = delta.textContent;
+        if (delta.hasOwnProperty('innerHTML')) result.innerHTML = delta.innerHTML;
+        if (delta.tagname) result.tagname = delta.tagname;
+        normalizeAnchorAjax(result);
+        return result;
+      }
+
+      // NLP parsing
+      const TOK = t => String(t || '').match(/"[^"]*"|'[^']*'|\S+/g) || [];
+      const firstQuoted = s => { const m = s.match(/"([^"]+)"|'([^']+)'/); return m ? (m[1] ?? m[2]) : null; };
+      function parseObjectLikeAttributes(text) { const m = text.match(/attributes\s*:\s*\{([\s\S]*?)\}/i); if (!m) return {}; const body = m[1]; const re = /([a-zA-Z_][\w-]*)\s*[:=]\s*(?:"([^"]*)"|'([^']*)'|([^,\s}]+))/g; const attrs = {}; let k; while ((k = re.exec(body)) !== null) { const key = k[1]; const val = k[2] ?? k[3] ?? k[4] ?? ''; attrs[key] = val; } return attrs; }
+      function parseKeyValuePairs(text) { const re = /([a-zA-Z_][\w-]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"']+))/g, attrs = {}; let m; while ((m = re.exec(text)) !== null) { attrs[m[1]] = m[2] ?? m[3] ?? m[4] ?? ''; } return attrs; }
+
+      function parseNLP(text) {
+        const newTag = text.match(/\b(?:new|create|make)\b\s+(?:a\s+)?(?:tag|tagname)?\s*([a-z][a-z0-9-]*)/i);
+        if (newTag) {
+          const tagname = newTag[1]; const content = firstQuoted(text);
+          const attrs = { ...parseObjectLikeAttributes(text), ...parseKeyValuePairs(text) };
+          return { type: 'stage', delta: { tagname, attributes: attrs, ...(content ? { textContent: content } : {}) }, replace: true };
+        }
+        if (/\badd\s+class\b/i.test(text)) return { type: 'stage', delta: { classAdd: text.replace(/^[\s\S]*?\bclass\b/i, '').trim() } };
+        if (/\bremove\s+class\b/i.test(text)) return { type: 'stage', delta: { classRemove: text.replace(/^[\s\S]*?\bclass\b/i, '').trim() } };
+        if (/\btoggle\s+class\b/i.test(text)) return { type: 'stage', delta: { classToggle: text.replace(/^[\s\S]*?\bclass\b/i, '').trim() } };
+        const repl = text.match(/\breplace\s+class\s+([^\s]+)\s+with\s+([^\s]+)/i);
+        if (repl) return { type: 'stage', delta: { classReplace: [[repl[1], repl[2]]] } };
+        const exact = text.match(/\bset\s+class\s+exact(?:ly)?\s+"([^"]+)"/i);
+        if (exact) return { type: 'stage', delta: { classSetExactly: exact[1] } };
+        const styleB = text.match(/\bstyle\s*:\s*"([^"]+)"/i) || text.match(/\bstyle\s+(.+)$/i);
+        if (styleB) return { type: 'stage', delta: { style: (styleB[1] || styleB[0].replace(/^style\s*/i, '')).replace(/^:/, '').trim() } };
+        if (/\battributes\s*:/i.test(text) || /=/.test(text)) return { type: 'stage', delta: { attributes: { ...parseObjectLikeAttributes(text), ...parseKeyValuePairs(text) } } };
+        if (/\btextcontent\b/i.test(text)) return { type: 'stage', delta: { textContent: firstQuoted(text) || '' } };
+        if (/\binnerhtml\b/i.test(text)) return { type: 'stage', delta: { innerHTML: firstQuoted(text) || '' } };
+        const maybeText = firstQuoted(text); if (maybeText != null) return { type: 'stage', delta: { textContent: maybeText } };
+        return { type: 'noop' };
+      }
+
+      // Repo
+      const Repo = (() => {
+        const state = { commits: new Map(), branches: new Map(), head: { branch: 'main', commitId: null }, index: {}, working: {} };
+        function init(initial) {
+          state.commits.clear(); state.branches.clear();
+          state.index = {};
+          state.working = deepClone(initial || { tagname: 'div', attributes: { id: genId('node') }, textContent: 'Hello' });
+          const root = { id: 'root', parent: null, time: nowIso(), branch: 'main', message: 'root', payload: deepClone(state.working) };
+          state.commits.set(root.id, root);
+          state.branches.set('main', root.id);
+          state.head = { branch: 'main', commitId: root.id };
+          return status();
+        }
+        function status() { const head = state.commits.get(state.head.commitId); return { branch: state.head.branch, head: head ? { id: head.id, time: head.time, message: head.message } : null }; }
+        function currentBase() { const head = state.commits.get(state.head.commitId); return head ? deepClone(head.payload) : {}; }
+        function working() { return deepClone(state.working); }
+        function index() { return deepClone(state.index); }
+        function stage(delta, options = {}) {
+          if (delta && delta.__replace) { state.index = delta.__replace; }
+          else { state.index = mergePayload(state.index, delta, options); }
+          state.working = mergePayload(currentBase(), state.index, options);
+          return working();
+        }
+        function commit(message = '(no message)') {
+          const payload = mergePayload(currentBase(), state.index);
+          const id = 'c-' + Math.random().toString(36).slice(2, 9);
+          const c = { id, parent: state.head.commitId, time: nowIso(), branch: state.head.branch, message, payload: deepClone(payload) };
+          state.commits.set(id, c); state.branches.set(state.head.branch, id); state.head.commitId = id;
+          state.index = {}; state.working = deepClone(payload);
+          return { id, message, time: c.time };
+        }
+        function log(limit = 32) { const out = []; let id = state.head.commitId; while (id && out.length < limit) { const c = state.commits.get(id); if (!c) break; out.push({ id: c.id, parent: c.parent, branch: c.branch, time: c.time, message: c.message }); id = c.parent; } return out; }
+        function diff(a = null, b = null) {
+          const B = state.commits.get(b || state.head.commitId); const A = state.commits.get(a || (B ? B.parent : null));
+          if (!A || !B) return { error: 'need at least 2 commits' };
+          const diffs = []; const keys = new Set([...Object.keys(A.payload || {}), ...Object.keys(B.payload || {})]);
+          keys.forEach(k => {
+            if (k === 'attributes') { const aa = A.payload.attributes || {}, bb = B.payload.attributes || {}, attrs = new Set([...Object.keys(aa), ...Object.keys(bb)]), changes = []; attrs.forEach(n => { if (aa[n] !== bb[n]) changes.push({ attr: n, from: aa[n], to: bb[n] }); }); if (changes.length) diffs.push({ field: 'attributes', changes }); }
+            else if (k === 'textContent' || k === 'innerHTML' || k === 'tagname') { if (A.payload[k] !== B.payload[k]) diffs.push({ field: k, from: A.payload[k], to: B.payload[k] }); }
+          });
+          const ca = (A.payload.attributes || {}).class || '', cb = (B.payload.attributes || {}).class || '';
+          if (ca !== cb) {
+            const sa = new Set(ca.split(/\s+/).filter(Boolean)), sb = new Set(cb.split(/\s+/).filter(Boolean));
+            const added = [...sb].filter(x => !sa.has(x)), removed = [...sa].filter(x => !sb.has(x));
+            diffs.push({ field: 'classTokens', added, removed });
+          }
+          return { diffs, from: A.payload, to: B.payload };
+        }
+        function checkout(id) { const c = state.commits.get(id); if (!c) return { error: 'commit not found' }; state.index = {}; state.working = deepClone(c.payload); state.branches.set(state.head.branch, c.id); state.head.commitId = c.id; return status(); }
+        function branch(name) { name = trim(name || ''); if (!name) return { error: 'branch name required' }; state.branches.set(name, state.head.commitId); return { ok: true, branch: name, head: state.head.commitId }; }
+        function checkoutBranch(name) { name = trim(name || ''); if (!state.branches.has(name)) return { error: 'branch not found' }; const id = state.branches.get(name); state.head = { branch: name, commitId: id }; state.index = {}; state.working = deepClone(state.commits.get(id)?.payload || {}); return status(); }
+        return { init, status, stage, working, index, commit, log, diff, checkout, branch, checkoutBranch };
+      })();
+
+      // NLPGit facade
+      const NLPGit = {
+        init: (p) => Repo.init(p),
+        handle(text) { const cmd = parseNLP(text); if (cmd.type === 'stage') { if (cmd.replace) return Repo.stage({ __replace: cmd.delta }, { overwrite: true }); return Repo.stage(cmd.delta); } return { noop: true }; },
+        stage: (d, opts) => Repo.stage(d, opts),
+        commit: (m) => Repo.commit(m),
+        log: (n) => Repo.log(n),
+        diff: (a, b) => Repo.diff(a, b),
+        status: () => Repo.status(),
+        branch: (n) => Repo.branch(n),
+        checkoutBranch: (n) => Repo.checkoutBranch(n),
+        checkout: (id) => Repo.checkout(id),
+        current: () => Repo.working(),
+        index: () => Repo.index(),
+        render: (targetId = 'centerContent') => {
+          const payload = Repo.working();
+          const view = { tagname: 'div', id: genId('card'), 0: payload };
+          preprocessView(view);
+          if (typeof global.modala === 'function') global.modala(view, targetId);
+          else document.getElementById(targetId)?.replaceChildren(document.createTextNode('modala() not found.'));
+        }
+      };
+      global.NLPGit = NLPGit;
+
+      // UI wiring
+      const $ = id => document.getElementById(id);
+      const status = $('status');
+      function refreshPanels() {
+        $('payloadPre').textContent = JSON.stringify(NLPGit.current(), null, 2);
+        $('indexPre').textContent = JSON.stringify(NLPGit.index(), null, 2);
+        $('logPre').textContent = JSON.stringify(NLPGit.log(), null, 2);
+        $('diffPre').textContent = JSON.stringify(NLPGit.diff(), null, 2);
+      }
+
+      // Initialize repo
+      NLPGit.init({ tagname: 'div', attributes: { id: genId('node'), class: 'box' }, textContent: 'Hello' });
+      refreshPanels();
+
+      // CLI
+      const cliIn = $('cliInput'), cliOut = $('cliOut');
+      function printLine(s) { const d = document.createElement('div'); d.textContent = s; cliOut.appendChild(d); cliOut.scrollTop = cliOut.scrollHeight; }
+      function printJSON(obj) { const d = document.createElement('pre'); d.textContent = JSON.stringify(obj, null, 2); cliOut.appendChild(d); cliOut.scrollTop = cliOut.scrollHeight; }
+
+      const Commands = {
+        help() { printLine('Commands: init, nlp, new, stage, commit, status, log, diff, undo, branch, checkout, show, render, class, style, attr, export, import, stash'); },
+        init(args) { if (args.length) { try { printJSON(NLPGit.init(JSON.parse(args.join(' ')))); } catch { printJSON(NLPGit.init()); } } else printJSON(NLPGit.init()); },
+        nlp(args) { const t = args.join(' ').replace(/^"|"$/g, ''); NLPGit.handle(t); refreshPanels(); printLine('staged (nlp)'); },
+        new(args) { const t = 'new ' + args.join(' '); NLPGit.handle(t); refreshPanels(); printLine('staged (new)'); },
+        stage(args) { try { NLPGit.stage(JSON.parse(args.join(' '))); refreshPanels(); printLine('staged'); } catch { printLine('stage expects JSON'); } },
+        commit(args) { const c = NLPGit.commit(args.join(' ') || '(no message)'); refreshPanels(); printJSON(c); },
+        status() { printJSON(NLPGit.status()); },
+        log() { printJSON(NLPGit.log()); },
+        diff() { printJSON(NLPGit.diff()); },
+        undo() { const lg = NLPGit.log(); if (lg.length > 1) { const parent = lg[1].id; printJSON(NLPGit.checkout(parent)); refreshPanels(); } else printLine('no parent'); },
+        branch(args) { printJSON(NLPGit.branch(args[0] || '')); },
+        checkout(args) { const id = args[0] || ''; if (!id) { printLine('usage: checkout <id|branch>'); return; } const br = NLPGit.checkoutBranch(id); if (!br.error) { printJSON(br); refreshPanels(); return; } printJSON(NLPGit.checkout(id)); refreshPanels(); },
+        show(args) { const w = (args[0] || 'working').toLowerCase(); if (w === 'working') printJSON(NLPGit.current()); else if (w === 'index') printJSON(NLPGit.index()); else printJSON(NLPGit.log()[0] || {}); },
+        // render(targetId = 'centerContent') {
+        //   const payload = Repo.working();
+        //   const view = { tagname: 'div', id: 'card-' + Math.random().toString(36).slice(2, 8), 0: payload };
+        //   safeRender(view, targetId);
+        // },
+        render(args){ const tgt=args[0]||($('quickTarget').value.trim()||'centerContent'); NLPGit.render(tgt); printLine('rendered → '+tgt); },
+        export() { printJSON(NLPGit.current()); },
+        import(args) { try { NLPGit.stage({ __replace: JSON.parse(args.join(' ')) }, { overwrite: true }); refreshPanels(); printLine('import staged'); } catch { printLine('import expects JSON'); } },
+        class(args) { const sub = (args.shift() || '').toLowerCase(); const tokens = args.join(' '); if (sub === 'add') NLPGit.stage({ classAdd: tokens }); else if (sub === 'remove') NLPGit.stage({ classRemove: tokens }); else if (sub === 'toggle') NLPGit.stage({ classToggle: tokens }); else if (sub === 'replace') { const a = args[0], b = args[1]; NLPGit.stage({ classReplace: [[a, b]] }); } else if (sub === 'set') { NLPGit.stage({ classSetExactly: tokens.replace(/^"|"$/g, '') }); } refreshPanels(); printLine('class ' + sub); },
+        style(args) { NLPGit.stage({ style: args.join(' ').replace(/^"|"$/g, '') }); refreshPanels(); printLine('style merged'); },
+        attr(args) { const sub = (args.shift() || '').toLowerCase(); if (sub === 'set') { const k = args[0], v = args.slice(1).join(' '); const d = { attributes: {} }; d.attributes[k] = v; NLPGit.stage(d); printLine('attr set'); } else if (sub === 'del') { const k = args[0]; const w = NLPGit.current(); const attrs = { ...(w.attributes || {}) }; delete attrs[k]; NLPGit.stage({ attributes: attrs }, { overwrite: true }); printLine('attr del'); } refreshPanels(); }
+      };
+      function exec1(line) {
+        if (!line.trim()) return;
+        printLine('> ' + line);
+        // chaining by &&
+        line.split('&&').map(s => s.trim()).filter(Boolean).forEach(cmdline => {
+          const tokens = cmdline.match(/"[^"]*"|'[^']*'|\S+/g) || [];
+          const cmd = (tokens.shift() || '').toLowerCase();
+          if (Commands[cmd]) Commands[cmd](tokens);
+          else Commands.nlp([cmd, ...tokens]); // fallback to NLP
+        });
+      }
+
+      $('cliRun').addEventListener('click', () => { exec1($('cliInput').value); $('cliInput').value = ''; });
+      $('cliCommit').addEventListener('click', () => { Commands.commit([$('cliInput').value || '(no message)']); $('cliInput').value = ''; });
+      $('cliRender').addEventListener('click', () => { Commands.render([]); });
+      $('cliInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); $('cliRun').click(); } });
+
+      $('renderBtn').addEventListener('click', () => { Commands.render([]); });
+
+      // Panel of commands (chips)
+      function addChips(containerId, items) {
+        const c = $(containerId);
+        items.forEach(({ cmd, label, title }) => {
+          const b = document.createElement('button');
+          b.className = 'chip'; b.textContent = label || cmd; if (title) b.title = title;
+          b.addEventListener('click', () => { $('cliInput').value = cmd; });
+          c.appendChild(b);
+        });
+      }
+
+      addChips('repoChips', [
+        { cmd: 'status', label: 'status' },
+        { cmd: 'log', label: 'log' },
+        { cmd: 'diff', label: 'diff' },
+        { cmd: 'commit "update"', label: 'commit' },
+        { cmd: 'branch feature-x', label: 'branch feature-x' },
+        { cmd: 'checkout feature-x', label: 'checkout feature-x' },
+        { cmd: 'undo', label: 'undo' }
+      ]);
+
+      addChips('nlpChips', [
+        { cmd: 'new div tag "Hello" attributes:{id:hero, class:"card"}', label: 'new div "Hello"' },
+        { cmd: 'new a tag "pipes.js" attributes:{id:"pipes.js", ajax:"h.php"}', label: 'new a ajax→href' },
+        { cmd: 'nlp "attributes:{ajax:sample.html, insert:content}"', label: 'attrs ajax/insert' },
+        { cmd: 'nlp "textContent \\"Updated\\""', label: 'textContent "Updated"' }
+      ]);
+
+      addChips('classChips', [
+        { cmd: 'class add primary rounded', label: 'class add' },
+        { cmd: 'class remove rounded', label: 'class remove' },
+        { cmd: 'class toggle shadow', label: 'class toggle' },
+        { cmd: 'class replace primary accent', label: 'class replace' },
+        { cmd: 'class set "card shadow"', label: 'class set exactly' }
+      ]);
+      addChips('styleChips', [
+        { cmd: 'style "padding: 12px; color: #e2e8f0;"', label: 'style merge' },
+        { cmd: 'style "border: 1px solid #334155;"', label: 'style border' }
+      ]);
+
+      addChips('attrChips', [
+        { cmd: 'attr set id content', label: 'attr set id' },
+        { cmd: 'attr set ajax sample.html', label: 'attr set ajax' },
+        { cmd: 'attr set insert content', label: 'attr set insert' },
+        { cmd: 'attr del ajax', label: 'attr del ajax' }
+      ]);
+
+      addChips('renderChips', [
+        { cmd: 'render', label: 'render' },
+        { cmd: 'show working', label: 'show working' },
+        { cmd: 'export', label: 'export' }
+      ]);
+
+      // Initial state print
+      $('logPre').textContent = JSON.stringify(NLPGit.log(), null, 2);
+      status.textContent = 'repo initialized';
+    })(window);
+  </script>
+</body>
+
+</html>
