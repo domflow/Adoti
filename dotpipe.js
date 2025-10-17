@@ -5340,7 +5340,7 @@ function modala(value, tempTag, root, id) {
     }
     
     if (value && value.attributes && typeof value.attributes === 'object' && !Array.isArray(value.attributes)) {
-        applyAttributesObject(tempTag, value.attributes);
+        applyAttributesObject(elem, value.attributes); // apply to the created element
     }
 
     // 1) First pass: apply base-level attributes (id/class/style/any-attr except reserved)

@@ -57,9 +57,11 @@
       font-size: 12px
     }
 
+
     main {
       display: grid;
-      grid-template-columns: 320px 1fr 400px;
+      grid-template-columns: 320px 1fr;
+      /* was: 320px 1fr 400px */
       gap: 10px;
       padding: 10px
     }
@@ -240,93 +242,363 @@
       font-size: 12px;
       color: #cbd5e1
     }
+
+    /* Property panel inside the tree */
+    .prop-group {
+      margin: 6px 0 4px 22px;
+      border-left: 1px dashed #334155;
+      padding-left: 10px;
+    }
+
+    .prop-title {
+      color: #94a3b8;
+      font-size: 12px;
+      margin: 4px 0;
+      user-select: none;
+    }
+
+    .prop-row {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 8px;
+      align-items: baseline;
+      margin: 2px 0;
+    }
+
+    .prop-k {
+      color: #cbd5e1;
+      font: 12px ui-monospace, Menlo, Consolas, monospace;
+      opacity: .9;
+    }
+
+    .prop-v {
+      color: #e5e7eb;
+      font: 12px ui-monospace, Menlo, Consolas, monospace;
+      opacity: .95;
+      word-break: break-all;
+    }
+
+    /* Bottom Inspector (horizontal) */
+    .inspector-bar {
+      grid-column: 1 / -1;
+      /* span full width below the top row */
+    }
+
+    .inspector-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .inspector-block .section-title {
+      margin-bottom: 6px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .inspector-block .panel {
+      min-height: 180px;
+      /* tune if you want taller/shorter panes */
+      overflow: auto;
+    }
+
+    /* Responsive wrap */
+    @media (max-width: 1200px) {
+      .inspector-grid {
+        grid-template-columns: repeat(2, minmax(240px, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .inspector-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* HTML Button Tree */
+    #treePanel {
+      overflow: auto;
+    }
+
+    /* Base tree layout and guides */
+    .tree {
+      margin: 0;
+      padding-left: 18px;
+      list-style: none;
+      position: relative;
+      line-height: 1.35;
+    }
+
+    .tree ul {
+      margin: 4px 0 0 0;
+      padding-left: 18px;
+      list-style: none;
+      position: relative;
+    }
+
+    .tree ul::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      border-left: 1px solid #334155;
+      opacity: 0.5;
+    }
+
+    .tree li {
+      position: relative;
+      margin: 4px 0;
+      padding-left: 14px;
+    }
+
+    .tree li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.9em;
+      width: 12px;
+      border-top: 1px solid #334155;
+      opacity: 0.5;
+    }
+
+    /* details/summary for branches */
+    .tree details {
+      margin: 0;
+    }
+
+    .tree summary {
+      list-style: none;
+      cursor: default;
+      /* we toggle via button */
+      outline: none;
+    }
+
+    .tree summary::-webkit-details-marker {
+      display: none;
+    }
+
+    /* Node buttons */
+    .node-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      background: #0b1226;
+      /* dark panel box */
+      border: 1px solid #334155;
+      /* slate border */
+      border-radius: 6px;
+      color: var(--text);
+      font: 12px ui-monospace, Menlo, Consolas, monospace;
+      white-space: nowrap;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .node-btn:hover {
+      background: #0f172a;
+    }
+
+    /* Focus ring */
+    .node-btn:focus-visible {
+      box-shadow: 0 0 0 2px #1d4ed8;
+      border-color: #1d4ed8;
+    }
+
+    /* Selected state */
+    .node-btn.selected {
+      background: rgba(59, 130, 246, .15);
+      border-color: #3b82f6;
+      box-shadow: inset 0 0 0 1px #3b82f6, 0 0 0 2px rgba(59, 130, 246, .3);
+    }
+
+    /* Tiny arrow icon in branch summary */
+    .summary-arrow {
+      display: inline-block;
+      width: 10px;
+      margin-right: 4px;
+      text-align: center;
+      color: #94a3b8;
+      user-select: none;
+      transform: rotate(0deg);
+      transition: transform .15s ease;
+    }
+
+    details[open]>summary .summary-arrow {
+      transform: rotate(90deg);
+    }
+
+    /* Label parts */
+    .node-tag {
+      color: #60a5fa;
+    }
+
+    /* blue-400 */
+    .node-id {
+      color: #22c55e;
+    }
+
+    /* green-500 */
+    .node-class {
+      color: #eab308;
+    }
+
+    /* amber-500 */
+    .node-meta {
+      color: #94a3b8;
+    }
+
+    /* muted */
+
+
+    /* Node buttons */
+    .node-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      background: #0b1226;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      color: var(--text);
+      font: 12px ui-monospace, Menlo, Consolas, monospace;
+      white-space: nowrap;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .node-btn:hover {
+      background: #0f172a;
+    }
+
+    /* Focus ring */
+    .node-btn:focus-visible {
+      box-shadow: 0 0 0 2px #1d4ed8;
+      /* blue-700 ring */
+      border-color: #1d4ed8;
+    }
+
+    /* Selected state (very obvious) */
+    .node-btn.selected {
+      background: rgba(59, 130, 246, 0.15);
+      /* blue-500 with alpha */
+      border-color: #3b82f6;
+      box-shadow: inset 0 0 0 1px #3b82f6, 0 0 0 2px rgba(59, 130, 246, .3);
+    }
+
+    /* Tiny arrow icon in summary for branches */
+    .summary-arrow {
+      display: inline-block;
+      width: 10px;
+      margin-right: 4px;
+      text-align: center;
+      color: #94a3b8;
+      user-select: none;
+      transform: rotate(0deg);
+      transition: transform .15s ease;
+    }
+
+    details[open]>summary .summary-arrow {
+      transform: rotate(90deg);
+    }
+
+    /* Label parts */
+    .node-tag {
+      color: #60a5fa;
+    }
+
+    /* blue-400 */
+    .node-id {
+      color: #22c55e;
+    }
+
+    /* green-500 */
+    .node-class {
+      color: #eab308;
+    }
+
+    /* amber-500 */
+    .node-meta {
+      color: #94a3b8;
+    }
+
+    /* Make mouse-clicks show a focus ring too (not just keyboard) */
+    .node-btn:focus {
+      box-shadow: 0 0 0 2px #1d4ed8;
+      border-color: #1d4ed8;
+    }
+
+    /* Highlight the focused/selected preview node */
+    .preview-focus {
+      outline: 2px solid #3b82f6;
+      /* blue-500 */
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, .25);
+      border-radius: 4px;
+      transition: box-shadow .15s ease;
+    }
+
+
+    /* Node chip */
+    .node-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      background: #0b1226;
+      /* dark panel */
+      border: 1px solid #334155;
+      /* slate border */
+      border-radius: 6px;
+      color: var(--text);
+      font: 12px ui-monospace, Menlo, Consolas, monospace;
+      white-space: nowrap;
+    }
+
+    .node-chip.leaf {
+      opacity: 0.95;
+    }
+
+    .node-tag {
+      color: #60a5fa;
+    }
+
+    /* blue-400 */
+    .node-id {
+      color: #22c55e;
+    }
+
+    /* green-500 */
+    .node-class {
+      color: #eab308;
+    }
+
+    /* amber-500 */
+    .node-meta {
+      color: #94a3b8;
+    }
+
+    /* muted */
+    .node-chip:hover {
+      background: #0f172a;
+      /* slightly lighter */
+    }
+
+    /* Compact details arrow indicator */
+    .summary-arrow {
+      display: inline-block;
+      width: 10px;
+      text-align: center;
+      color: #94a3b8;
+      user-select: none;
+    }
+
+    details[open]>summary .summary-arrow {
+      transform: rotate(90deg);
+    }
   </style>
   <script src="dotpipe.js"></script>
-  <script>
-    (function bindDotPipeGlobals() {
-      try {
-        if (typeof window.modala !== 'function' && typeof modala === 'function') window.modala = modala;
-        if (typeof window.modal !== 'function' && typeof modal === 'function') window.modal = modal;
-        if (typeof window.pipes !== 'function' && typeof pipes === 'function') window.pipes = pipes;
-        if (typeof window.domContentLoad !== 'function' && typeof domContentLoad === 'function') window.domContentLoad = domContentLoad;
-      } catch (e) { }
-    })();
-  </script>
-  <script>
-    // 1) A trivial view
-    const v = { tagname:'div', id:'sanity', 0:{ tagname:'div', textContent:'Hello from renderer' } };
-    // 2) Try modala(), else fallback
-    if (typeof window.safeRender === 'function') safeRender(v, 'centerContent');
-    else if (typeof window.modala === 'function') window.modala(v, 'centerContent');
-    else console.warn('No renderer available');
-
-    // Basic payload → DOM renderer (fallback)
-    function renderBasic(node, parent) {
-      if (!node || typeof node !== 'object') return;
-      const tag = (node.tagname || node.tagName || 'div').toString();
-      const el = document.createElement(tag);
-
-      // Apply nested attributes:{} and base-level attrs
-      const attrs = { ...(node.attributes || {}) };
-      for (const [k, v] of Object.entries(node)) {
-        if (/^\d+$/.test(k)) continue;
-        if (['tagname', 'tagName', 'textContent', 'innerHTML', 'innerText', 'attributes', 'header'].includes(k)) continue;
-        attrs[k] = v;
-      }
-      Object.entries(attrs).forEach(([k, v]) => {
-        if (v === true) el.setAttribute(k, '');
-        else if (v !== false && v != null) el.setAttribute(k, String(v));
-      });
-
-      if ('textContent' in node) el.textContent = String(node.textContent);
-      if ('innerHTML' in node) el.innerHTML = String(node.innerHTML);
-      if ('innerText' in node) el.innerText = String(node.innerText);
-
-      // Children (numeric keys)
-      Object.keys(node).forEach(k => {
-        if (/^\d+$/.test(k) && node[k] && typeof node[k] === 'object') {
-          renderBasic(node[k], el);
-        }
-      });
-
-      parent.appendChild(el);
-    }
-
-    // Safe render wrapper (uses modala if present; otherwise basic)
-    function safeRender(view, targetId = 'centerContent') {
-      const target = typeof targetId === 'string' ? document.getElementById(targetId) : targetId;
-      if (!target) return console.warn('Preview target not found:', targetId);
-      target.innerHTML = '';
-
-      // Try modala first
-      try {
-        if (typeof window.modala === 'function') {
-          window.modala(view, targetId);
-          return;
-        }
-      } catch (e) {
-        console.warn('modala threw:', e);
-      }
-
-      // Fallback: basic render
-      try {
-        // Ensure attributes:{} applied to the tree (like your preprocess step)
-        (function preprocess(n) {
-          if (!n || typeof n !== 'object') return;
-          const a = n.attributes;
-          if (a && typeof a === 'object' && !Array.isArray(a)) {
-            for (const [k, v] of Object.entries(a)) { if (!(k in n)) n[k] = v; }
-          }
-          Object.keys(n).forEach(k => /^\d+$/.test(k) && preprocess(n[k]));
-        })(view);
-
-        renderBasic(view, target);
-      } catch (e) {
-        target.textContent = 'Render failed (no modala and fallback errored). Check console.';
-        console.error(e);
-      }
-    }
-  </script>
 
 </head>
 
@@ -358,6 +630,10 @@
         <div class="muted">Render / Show</div>
         <div class="chips" id="renderChips"></div>
 
+        <!-- Tree / Node chips group -->
+        <div class="muted">Tree / Node</div>
+        <div class="chips" id="treeChips"></div>
+
         <div class="hr"></div>
         <div class="row">
           <input id="quickTarget" class="inp" placeholder="target id (for insert or render)" />
@@ -372,359 +648,1345 @@
           <div class="tag">No implicit <pipe>
           </div>
         </div>
+
+        <!-- REQUIRED: target for preview rendering -->
         <div id="centerContent" class="panel">
           <div class="muted">Use the CLI or Panel to stage/commit and “Render”.</div>
         </div>
+
+        <!-- HTML Tree Visualization -->
+        <div id="treePanel" class="panel" style="margin-top:8px;">
+          <div id="treeHtml"></div>
+        </div>
+
+        <!-- Actions bound to selected tree node -->
+        <div id="treeActions" class="tree-actions">
+          <div class="muted">Node actions (selected path shows on hover):</div>
+          <div class="actions-row">
+            <button class="btn small" id="treeAddChild">Add child</button>
+            <button class="btn small" id="treeSetText">Set text</button>
+            <button class="btn small" id="treeSetHTML">Set HTML</button>
+            <button class="btn small" id="treeSetAttrs">Set attributes</button>
+            <button class="btn small" id="treeWrap">Wrap in…</button>
+            <button class="btn small warn" id="treeReplace">Replace…</button>
+            <button class="btn small bad" id="treeDelete">Delete</button>
+          </div>
+        </div>
+
       </section>
 
-      <!-- Right: Inspector -->
-      <section class="card col">
-        <div class="section-title">Working Payload</div>
-        <div class="panel">
-          <pre id="payloadPre" class="code small"></pre>
+      <!-- Bottom: CLI -->
+      <footer>
+        <div class="cli">
+          <div class="prompt">nlp-git></div>
+          <input id="cliInput" class="cli-inp"
+            placeholder='e.g., new div tag "Hello" attributes:{id:hero, class:"box"}' />
+          <button id="cliRun" class="btn">Run</button>
+          <button id="cliCommit" class="btn good">Commit</button>
+          <button id="cliRender" class="btn alt">Render</button>
         </div>
-        <div class="section-title">Staged Delta (index)</div>
-        <div class="panel">
-          <pre id="indexPre" class="code small"></pre>
-        </div>
-        <div class="section-title">Log</div>
-        <div class="panel">
-          <pre id="logPre" class="code small"></pre>
-        </div>
-        <div class="section-title">Diff (HEAD vs parent)</div>
-        <div class="panel">
-          <pre id="diffPre" class="code small"></pre>
+        <div id="cliOut" class="cli-out"></div>
+      </footer>
+      <!-- Bottom: Inspector (horizontal bar) -->
+      <section class="card inspector-bar">
+        <div class="section-title">Inspector</div>
+        <div class="inspector-grid">
+
+          <div class="inspector-block">
+            <div class="section-title">Working Payload</div>
+            <div class="panel">
+              <pre id="payloadPre" class="code small"></pre>
+            </div>
+          </div>
+
+          <div class="inspector-block">
+            <div class="section-title">Staged Delta (index)</div>
+            <div class="panel">
+              <pre id="indexPre" class="code small"></pre>
+            </div>
+          </div>
+
+          <div class="inspector-block">
+            <div class="section-title">Log</div>
+            <div class="panel">
+              <pre id="logPre" class="code small"></pre>
+            </div>
+          </div>
+
+          <div class="inspector-block">
+            <div class="section-title">Diff (HEAD vs parent)</div>
+            <div class="panel">
+              <pre id="diffPre" class="code small"></pre>
+            </div>
+          </div>
+
         </div>
       </section>
+
     </main>
 
-    <!-- Bottom: CLI -->
-    <footer>
-      <div class="cli">
-        <div class="prompt">nlp-git></div>
-        <input id="cliInput" class="cli-inp"
-          placeholder='e.g., new div tag "Hello" attributes:{id:hero, class:"box"}' />
-        <button id="cliRun" class="btn">Run</button>
-        <button id="cliCommit" class="btn good">Commit</button>
-        <button id="cliRender" class="btn alt">Render</button>
-      </div>
-      <div id="cliOut" class="cli-out"></div>
-    </footer>
+
   </div>
 
   <script>
-    (function (global) {
+    (function (window) {
       'use strict';
 
-      // Ensure modala/pipes on window
-      (function bindDotPipeGlobals() {
-        try {
-          if (typeof global.modala !== 'function' && typeof modala === 'function') global.modala = modala;
-          if (typeof global.modal !== 'function' && typeof modal === 'function') global.modal = modal;
-          if (typeof global.pipes !== 'function' && typeof pipes === 'function') global.pipes = pipes;
-          if (typeof global.domContentLoad !== 'function' && typeof domContentLoad === 'function') global.domContentLoad = domContentLoad;
-        } catch (e) { }
-      })();
+      // ——————————————————————————————————————————————————————
+      // App namespace and shorthand
+      // ——————————————————————————————————————————————————————
+      const $ = (id) => document.getElementById(id);
+      const qsa = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-      // Apply nested attributes:{} to nodes before calling modala()
-      function applyAttributesToNode(node) {
-        const attrs = node && node.attributes;
-        if (attrs && typeof attrs === 'object' && !Array.isArray(attrs)) {
-          for (const [k, v] of Object.entries(attrs)) { if (!(k in node)) node[k] = v; }
+      const App = {
+        state: {
+          LAST_PREVIEW_TARGET_ID: 'centerContent',
+          TREE_SELECTED_PATH: '',
+          TREE_STORE_KEY: 'tree.selected.path',
+          ACCORDION: true
+        },
+        utils: {}, Path: {}, Repo: {}, NLPGit: {},
+        Tree: {}, Actions: {}, UI: {}, CLI: {}, Chips: {}
+      };
+      window.App = App; // optional debugging
+
+      // ——————————————————————————————————————————————————————
+      // Utils + Modala validation
+      // ——————————————————————————————————————————————————————
+      App.utils = {
+        genId: (p = 'id') => p + '-' + Math.random().toString(36).slice(2, 8),
+        deepClone: (x) => JSON.parse(JSON.stringify(x || null)),
+        esc: (s) => String(s == null ? '' : s),
+
+        // selection persistence
+        rememberSelectedPath(path) {
+          try { sessionStorage.setItem(App.state.TREE_STORE_KEY, String(path || '')); } catch { }
+        },
+        loadSelectedPath() {
+          try { return sessionStorage.getItem(App.state.TREE_STORE_KEY) || ''; } catch { return ''; }
+        },
+
+        // class/style helpers (for class/style/attr commands)
+        parseStyle(s) {
+          const out = {};
+          String(s || '').split(';').map(x => x.trim()).filter(Boolean).forEach(r => {
+            const i = r.indexOf(':'); if (i === -1) return; out[r.slice(0, i).trim()] = r.slice(i + 1).trim();
+          });
+          return out;
+        },
+        serializeStyle(o) { return Object.entries(o).map(([k, v]) => `${k}: ${v}`).join('; '); },
+        mergeStyle(base, add) { const a = App.utils.parseStyle(base), b = App.utils.parseStyle(add); Object.assign(a, b); return App.utils.serializeStyle(a); },
+        mergeClass(base, add) {
+          const set = new Set(String(base || '').split(/\s+/).filter(Boolean));
+          String(add || '').split(/\s+/).filter(Boolean).forEach(c => set.add(c)); return Array.from(set).join(' ');
+        },
+        removeClassTokens(base, rm) { const set = new Set(String(base || '').split(/\s+/).filter(Boolean)); String(rm || '').split(/\s+/).filter(Boolean).forEach(c => set.delete(c)); return Array.from(set).join(' '); },
+        replaceClassToken(base, a, b) { const out = String(base || '').split(/\s+/).filter(Boolean).map(t => t === a ? b : t); return Array.from(new Set(out)).join(' '); },
+        toggleClassTokens(base, toggles) { const set = new Set(String(base || '').split(/\s+/).filter(Boolean)); String(toggles || '').split(/\s+/).filter(Boolean).forEach(c => set.has(c) ? set.delete(c) : set.add(c)); return Array.from(set).join(' '); },
+
+        // NLP helpers (minimal)
+        firstQuoted(s) { const m = s.match(/"([^"]+)"|'([^']+)'/); return m ? (m[1] ?? m[2]) : null; },
+        parseObjectLikeAttributes(text) { const m = text.match(/attributes\s*:\s*\{([\s\S]*?)\}/i); if (!m) return {}; const body = m[1], re = /([a-zA-Z_][\w-]*)\s*[:=]\s*(?:"([^"]*)"|'([^']*)'|([^,\s}]+))/g; const attrs = {}; let k; while ((k = re.exec(body)) !== null) attrs[k[1]] = k[2] ?? k[3] ?? k[4] ?? ''; return attrs; },
+        parseKeyValuePairs(text) { const re = /([a-zA-Z_][\w-]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"']+))/g, attrs = {}; let m; while ((m = re.exec(text)) !== null) attrs[m[1]] = m[2] ?? m[3] ?? m[4] ?? ''; return attrs; },
+
+        // modala validation/coercion
+        isModalaNode(x) {
+          return x && typeof x === 'object' && !Array.isArray(x) &&
+            typeof x.tagname === 'string' && x.tagname.length > 0;
+        },
+        coerceToModalaNode(x) {
+          if (App.utils.isModalaNode(x)) return x;
+          // Unwrap common wrapper { "0": {tag...} }
+          if (x && typeof x === 'object' && App.utils.isModalaNode(x['0'])) return x['0'];
+          return null;
+        },
+        assertModalaNode(n, context = 'payload') {
+          if (!App.utils.isModalaNode(n)) throw new Error(context + ' is not a valid modala node (needs {"tagname": "..."}).');
+        },
+
+        // preprocess (for basic fallback renderer)
+        preprocessView(node) {
+          if (!node || typeof node !== 'object') return;
+          const a = node.attributes;
+          if (a && typeof a === 'object' && !Array.isArray(a)) {
+            for (const [k, v] of Object.entries(a)) { if (!(k in node)) node[k] = v; }
+          }
+          Object.keys(node).forEach(k => /^\d+$/.test(k) && App.utils.preprocessView(node[k]));
         }
-      }
-      function preprocessView(node) {
-        if (!node || typeof node !== 'object') return;
-        applyAttributesToNode(node);
-        Object.keys(node).forEach(k => /^\d+$/.test(k) && preprocessView(node[k]));
-      }
+      };
 
-      // Utils
-      const genId = (p = 'id') => p + '-' + Math.random().toString(36).slice(2, 8);
-      const deepClone = x => JSON.parse(JSON.stringify(x || null));
-      const nowIso = () => new Date().toISOString();
-      const lower = s => (s || '').toLowerCase();
-      const trim = s => String(s || '').trim();
+      // ——————————————————————————————————————————————————————
+      // Numeric-children JSON path helpers (root/0/1 form)
+      // ——————————————————————————————————————————————————————
+      App.Path = {
+        split(p) { return String(p || 'root').split('/').filter(Boolean); }, // includes 'root' at [0]
+        get(root, path) {
+          if (!App.utils.isModalaNode(root)) return null;
+          const parts = this.split(path);
+          if (parts[0] !== 'root') return null;
+          let node = root;
+          for (const seg of parts.slice(1)) { if (!/^\d+$/.test(seg) || !node[seg] || typeof node[seg] !== 'object') return null; node = node[seg]; }
+          return node || null;
+        },
+        set(root, path, newNode) {
+          App.utils.assertModalaNode(root, 'root'); App.utils.assertModalaNode(newNode, 'newNode');
+          const parts = this.split(path);
+          if (parts[0] !== 'root') return null;
+          if (parts.length === 1) { // replace root
+            Object.keys(root).forEach(k => delete root[k]); Object.assign(root, newNode); return 'root';
+          }
+          const leaf = parts.pop(); const parentPath = parts.join('/'); const parent = this.get(root, parentPath);
+          if (!parent) return null; parent[leaf] = newNode; return path;
+        },
+        nextChildIndex(parent) {
+          const idxs = Object.keys(parent).filter(k => /^\d+$/.test(k)).map(Number);
+          return idxs.length ? Math.max(...idxs) + 1 : 0;
+        },
+        addChild(root, parentPath, childNode) {
+          App.utils.assertModalaNode(childNode, 'childNode');
+          const parent = this.get(root, parentPath);
+          if (!parent) return null;
+          const i = this.nextChildIndex(parent);
+          parent[String(i)] = childNode;
+          return parentPath + '/' + i;
+        },
+        insertChildAt(root, parentPath, index, childNode) {
+          App.utils.assertModalaNode(childNode, 'childNode');
+          const parent = this.get(root, parentPath);
+          if (!parent) return null;
+          const nums = Object.keys(parent).filter(k => /^\d+$/.test(k)).map(Number).sort((a, b) => a - b);
+          const max = nums.length ? Math.max(...nums) : -1;
+          for (let k = max; k >= index; k--) { if (parent.hasOwnProperty(k)) parent[String(k + 1)] = parent[String(k)]; }
+          parent[String(index)] = childNode;
+          return parentPath + '/' + index;
+        },
+        renumberChildren(node) {
+          const nums = Object.keys(node).filter(k => /^\d+$/.test(k)).map(Number).sort((a, b) => a - b);
+          const vals = nums.map(k => node[String(k)]); nums.forEach(k => delete node[String(k)]); vals.forEach((v, i) => { node[String(i)] = v; });
+        },
+        del(root, path) {
+          const parts = this.split(path); if (parts[0] !== 'root') return null;
+          if (parts.length === 1) return 'root'; // caller handles root delete separately
+          const leaf = parts.pop(); const parentPath = parts.join('/'); const parent = this.get(root, parentPath);
+          if (!parent) return null; delete parent[leaf]; this.renumberChildren(parent); return parentPath;
+        },
+        parentPath(path) {
+          const parts = this.split(path);
+          if (parts.length <= 1) return 'root'; // already root
+          return parts.slice(0, -1).join('/');
+        }
+      };
 
-      // class/style helpers
-      function mergeClass(base, add) { const set = new Set(String(base || '').split(/\s+/).filter(Boolean)); String(add || '').split(/\s+/).filter(Boolean).forEach(c => set.add(c)); return Array.from(set).join(' '); }
-      function removeClassTokens(base, rm) { const set = new Set(String(base || '').split(/\s+/).filter(Boolean)); String(rm || '').split(/\s+/).filter(Boolean).forEach(c => set.delete(c)); return Array.from(set).join(' '); }
-      function replaceClassToken(base, a, b) { const out = String(base || '').split(/\s+/).filter(Boolean).map(t => t === a ? b : t); return Array.from(new Set(out)).join(' '); }
-      function toggleClassTokens(base, toggles) { const set = new Set(String(base || '').split(/\s+/).filter(Boolean)); String(toggles || '').split(/\s+/).filter(Boolean).forEach(c => set.has(c) ? set.delete(c) : set.add(c)); return Array.from(set).join(' '); }
-      function parseStyle(s) { const out = {}; String(s || '').split(';').map(x => x.trim()).filter(Boolean).forEach(r => { const i = r.indexOf(':'); if (i === -1) return; const k = r.slice(0, i).trim(); const v = r.slice(i + 1).trim(); if (k) out[k] = v; }); return out; }
-      function serializeStyle(o) { return Object.entries(o).map(([k, v]) => `${k}: ${v}`).join('; '); }
-      function mergeStyle(base, add) { const a = parseStyle(base), b = parseStyle(add); Object.assign(a, b); return serializeStyle(a); }
+      // ——————————————————————————————————————————————————————
+      // Repo: single-node modala payload with mini Git
+      // ——————————————————————————————————————————————————————
+      const U = App.utils, P = App.Path;
 
-      // attribute merge
+      // class/style/attr merge for staging operations
       function mergeAttributes(base = {}, delta = {}, options = {}) {
-        const out = { ...(base || {}) };
-        const { classMode = 'merge', overwrite = false } = options;
-        if (delta.style != null) out.style = mergeStyle(out.style, delta.style);
-        if (delta.class != null) out.class = classMode === 'replace' ? String(delta.class) : mergeClass(out.class, delta.class);
-        if (delta.classAdd) out.class = mergeClass(out.class, delta.classAdd);
-        if (delta.classRemove) out.class = removeClassTokens(out.class, delta.classRemove);
-        if (delta.classToggle) out.class = toggleClassTokens(out.class, delta.classToggle);
-        if (Array.isArray(delta.classReplace)) delta.classReplace.forEach(([a, b]) => { if (a && b) out.class = replaceClassToken(out.class, a, b); });
+        const out = { ...(base || {}) }; const { classMode = 'merge', overwrite = false } = options;
+        if (delta.style != null) out.style = U.mergeStyle(out.style, delta.style);
+        if (delta.class != null) out.class = classMode === 'replace' ? String(delta.class) : U.mergeClass(out.class, delta.class);
+        if (delta.classAdd) out.class = U.mergeClass(out.class, delta.classAdd);
+        if (delta.classRemove) out.class = U.removeClassTokens(out.class, delta.classRemove);
+        if (delta.classToggle) out.class = U.toggleClassTokens(out.class, delta.classToggle);
+        if (Array.isArray(delta.classReplace)) delta.classReplace.forEach(([a, b]) => { if (a && b) out.class = U.replaceClassToken(out.class, a, b); });
         if (delta.classSetExactly != null) out.class = String(delta.classSetExactly);
-        Object.entries(delta).forEach(([k, v]) => {
-          if (v == null) return;
-          if (/^class(?:Add|Remove|Replace|Toggle|SetExactly)?$/i.test(k)) return;
-          if (k === 'style') return;
-          if (!overwrite && k in out) return;
-          out[k] = v;
-        });
+        Object.entries(delta).forEach(([k, v]) => { if (v == null) return; if (/^class/i.test(k) || k === 'style') return; if (!overwrite && k in out) return; out[k] = v; });
         if (out.class != null && !String(out.class).trim()) delete out.class;
         if (out.style != null && !String(out.style).trim()) delete out.style;
         return out;
       }
-
-      function normalizeAnchorAjax(payload) {
-        if (!payload || lower(payload.tagname) !== 'a') return payload;
-        const a = payload.attributes || {};
-        if (a.ajax) { a.href = a.ajax; delete a.ajax; }
-        payload.attributes = a;
-        return payload;
-      }
       function mergePayload(base = {}, delta = {}, options = {}) {
         const result = { ...(base || {}) };
-        const mergedAttrs = mergeAttributes(base.attributes || {}, { ...(delta.attributes || {}), class: delta.class, classAdd: delta.classAdd, classRemove: delta.classRemove, classReplace: delta.classReplace, classToggle: delta.classToggle, classSetExactly: delta.classSetExactly, style: delta.style }, options);
-        result.attributes = mergedAttrs;
+        result.attributes = mergeAttributes(base.attributes || {}, { ...(delta.attributes || {}), class: delta.class, classAdd: delta.classAdd, classRemove: delta.classRemove, classReplace: delta.classReplace, classToggle: delta.classToggle, classSetExactly: delta.classSetExactly, style: delta.style }, options);
         if (delta.hasOwnProperty('textContent')) result.textContent = delta.textContent;
         if (delta.hasOwnProperty('innerHTML')) result.innerHTML = delta.innerHTML;
         if (delta.tagname) result.tagname = delta.tagname;
-        normalizeAnchorAjax(result);
         return result;
       }
 
-      // NLP parsing
-      const TOK = t => String(t || '').match(/"[^"]*"|'[^']*'|\S+/g) || [];
-      const firstQuoted = s => { const m = s.match(/"([^"]+)"|'([^']+)'/); return m ? (m[1] ?? m[2]) : null; };
-      function parseObjectLikeAttributes(text) { const m = text.match(/attributes\s*:\s*\{([\s\S]*?)\}/i); if (!m) return {}; const body = m[1]; const re = /([a-zA-Z_][\w-]*)\s*[:=]\s*(?:"([^"]*)"|'([^']*)'|([^,\s}]+))/g; const attrs = {}; let k; while ((k = re.exec(body)) !== null) { const key = k[1]; const val = k[2] ?? k[3] ?? k[4] ?? ''; attrs[key] = val; } return attrs; }
-      function parseKeyValuePairs(text) { const re = /([a-zA-Z_][\w-]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"']+))/g, attrs = {}; let m; while ((m = re.exec(text)) !== null) { attrs[m[1]] = m[2] ?? m[3] ?? m[4] ?? ''; } return attrs; }
+      App.Repo = (function () {
+        const state = {
+          commits: new Map(), branches: new Map(), head: { branch: 'main', commitId: null },
+          index: {}, // staged delta against the node
+          working: {} // current single modala node
+        };
+        const nowIso = () => new Date().toISOString();
 
-      function parseNLP(text) {
-        const newTag = text.match(/\b(?:new|create|make)\b\s+(?:a\s+)?(?:tag|tagname)?\s*([a-z][a-z0-9-]*)/i);
-        if (newTag) {
-          const tagname = newTag[1]; const content = firstQuoted(text);
-          const attrs = { ...parseObjectLikeAttributes(text), ...parseKeyValuePairs(text) };
-          return { type: 'stage', delta: { tagname, attributes: attrs, ...(content ? { textContent: content } : {}) }, replace: true };
-        }
-        if (/\badd\s+class\b/i.test(text)) return { type: 'stage', delta: { classAdd: text.replace(/^[\s\S]*?\bclass\b/i, '').trim() } };
-        if (/\bremove\s+class\b/i.test(text)) return { type: 'stage', delta: { classRemove: text.replace(/^[\s\S]*?\bclass\b/i, '').trim() } };
-        if (/\btoggle\s+class\b/i.test(text)) return { type: 'stage', delta: { classToggle: text.replace(/^[\s\S]*?\bclass\b/i, '').trim() } };
-        const repl = text.match(/\breplace\s+class\s+([^\s]+)\s+with\s+([^\s]+)/i);
-        if (repl) return { type: 'stage', delta: { classReplace: [[repl[1], repl[2]]] } };
-        const exact = text.match(/\bset\s+class\s+exact(?:ly)?\s+"([^"]+)"/i);
-        if (exact) return { type: 'stage', delta: { classSetExactly: exact[1] } };
-        const styleB = text.match(/\bstyle\s*:\s*"([^"]+)"/i) || text.match(/\bstyle\s+(.+)$/i);
-        if (styleB) return { type: 'stage', delta: { style: (styleB[1] || styleB[0].replace(/^style\s*/i, '')).replace(/^:/, '').trim() } };
-        if (/\battributes\s*:/i.test(text) || /=/.test(text)) return { type: 'stage', delta: { attributes: { ...parseObjectLikeAttributes(text), ...parseKeyValuePairs(text) } } };
-        if (/\btextcontent\b/i.test(text)) return { type: 'stage', delta: { textContent: firstQuoted(text) || '' } };
-        if (/\binnerhtml\b/i.test(text)) return { type: 'stage', delta: { innerHTML: firstQuoted(text) || '' } };
-        const maybeText = firstQuoted(text); if (maybeText != null) return { type: 'stage', delta: { textContent: maybeText } };
-        return { type: 'noop' };
-      }
-
-      // Repo
-      const Repo = (() => {
-        const state = { commits: new Map(), branches: new Map(), head: { branch: 'main', commitId: null }, index: {}, working: {} };
-        function init(initial) {
-          state.commits.clear(); state.branches.clear();
-          state.index = {};
-          state.working = deepClone(initial || { tagname: 'div', attributes: { id: genId('node') }, textContent: 'Hello' });
-          const root = { id: 'root', parent: null, time: nowIso(), branch: 'main', message: 'root', payload: deepClone(state.working) };
-          state.commits.set(root.id, root);
-          state.branches.set('main', root.id);
-          state.head = { branch: 'main', commitId: root.id };
+        function init(initialNode) {
+          state.commits.clear(); state.branches.clear(); state.index = {};
+          const start = U.coerceToModalaNode(initialNode) || { tagname: 'div', attributes: { id: U.genId('node'), class: 'page' } };
+          state.working = U.deepClone(start);
+          const root = { id: 'root', parent: null, time: nowIso(), branch: 'main', message: 'root', payload: U.deepClone(state.working) };
+          state.commits.set(root.id, root); state.branches.set('main', root.id); state.head = { branch: 'main', commitId: root.id };
           return status();
         }
-        function status() { const head = state.commits.get(state.head.commitId); return { branch: state.head.branch, head: head ? { id: head.id, time: head.time, message: head.message } : null }; }
-        function currentBase() { const head = state.commits.get(state.head.commitId); return head ? deepClone(head.payload) : {}; }
-        function working() { return deepClone(state.working); }
-        function index() { return deepClone(state.index); }
+        function status() {
+          const head = state.commits.get(state.head.commitId);
+          return { branch: state.head.branch, head: head ? { id: head.id, time: head.time, message: head.message } : null };
+        }
+        function currentBase() { const head = state.commits.get(state.head.commitId); return head ? U.deepClone(head.payload) : {}; }
+        function working() { return U.deepClone(state.working); }
+        function index() { return U.deepClone(state.index); }
+
         function stage(delta, options = {}) {
-          if (delta && delta.__replace) { state.index = delta.__replace; }
-          else { state.index = mergePayload(state.index, delta, options); }
+          if (delta && delta.__replace) {
+            // Replace whole node
+            state.index = delta.__replace;
+          } else {
+            state.index = mergePayload(state.index, delta, options);
+          }
           state.working = mergePayload(currentBase(), state.index, options);
           return working();
         }
         function commit(message = '(no message)') {
           const payload = mergePayload(currentBase(), state.index);
           const id = 'c-' + Math.random().toString(36).slice(2, 9);
-          const c = { id, parent: state.head.commitId, time: nowIso(), branch: state.head.branch, message, payload: deepClone(payload) };
+          const c = { id, parent: state.head.commitId, time: nowIso(), branch: state.head.branch, message, payload: U.deepClone(payload) };
           state.commits.set(id, c); state.branches.set(state.head.branch, id); state.head.commitId = id;
-          state.index = {}; state.working = deepClone(payload);
+          state.index = {}; state.working = U.deepClone(payload);
           return { id, message, time: c.time };
         }
-        function log(limit = 32) { const out = []; let id = state.head.commitId; while (id && out.length < limit) { const c = state.commits.get(id); if (!c) break; out.push({ id: c.id, parent: c.parent, branch: c.branch, time: c.time, message: c.message }); id = c.parent; } return out; }
+        function log(limit = 32) {
+          const out = []; let id = state.head.commitId;
+          while (id && out.length < limit) { const c = state.commits.get(id); if (!c) break; out.push({ id: c.id, parent: c.parent, branch: c.branch, time: c.time, message: c.message }); id = c.parent; }
+          return out;
+        }
         function diff(a = null, b = null) {
           const B = state.commits.get(b || state.head.commitId); const A = state.commits.get(a || (B ? B.parent : null));
           if (!A || !B) return { error: 'need at least 2 commits' };
-          const diffs = []; const keys = new Set([...Object.keys(A.payload || {}), ...Object.keys(B.payload || {})]);
-          keys.forEach(k => {
-            if (k === 'attributes') { const aa = A.payload.attributes || {}, bb = B.payload.attributes || {}, attrs = new Set([...Object.keys(aa), ...Object.keys(bb)]), changes = []; attrs.forEach(n => { if (aa[n] !== bb[n]) changes.push({ attr: n, from: aa[n], to: bb[n] }); }); if (changes.length) diffs.push({ field: 'attributes', changes }); }
-            else if (k === 'textContent' || k === 'innerHTML' || k === 'tagname') { if (A.payload[k] !== B.payload[k]) diffs.push({ field: k, from: A.payload[k], to: B.payload[k] }); }
-          });
-          const ca = (A.payload.attributes || {}).class || '', cb = (B.payload.attributes || {}).class || '';
-          if (ca !== cb) {
-            const sa = new Set(ca.split(/\s+/).filter(Boolean)), sb = new Set(cb.split(/\s+/).filter(Boolean));
-            const added = [...sb].filter(x => !sa.has(x)), removed = [...sa].filter(x => !sb.has(x));
-            diffs.push({ field: 'classTokens', added, removed });
-          }
+          const diffs = [];['tagname', 'textContent', 'innerHTML'].forEach(k => { if (A.payload[k] !== B.payload[k]) diffs.push({ field: k, from: A.payload[k], to: B.payload[k] }); });
+          // attribute diffs
+          const aa = A.payload.attributes || {}, bb = B.payload.attributes || {};
+          const attrs = new Set([...Object.keys(aa), ...Object.keys(bb)]);
+          const changes = []; attrs.forEach(n => { if (aa[n] !== bb[n]) changes.push({ attr: n, from: aa[n], to: bb[n] }); });
+          if (changes.length) diffs.push({ field: 'attributes', changes });
           return { diffs, from: A.payload, to: B.payload };
         }
-        function checkout(id) { const c = state.commits.get(id); if (!c) return { error: 'commit not found' }; state.index = {}; state.working = deepClone(c.payload); state.branches.set(state.head.branch, c.id); state.head.commitId = c.id; return status(); }
-        function branch(name) { name = trim(name || ''); if (!name) return { error: 'branch name required' }; state.branches.set(name, state.head.commitId); return { ok: true, branch: name, head: state.head.commitId }; }
-        function checkoutBranch(name) { name = trim(name || ''); if (!state.branches.has(name)) return { error: 'branch not found' }; const id = state.branches.get(name); state.head = { branch: name, commitId: id }; state.index = {}; state.working = deepClone(state.commits.get(id)?.payload || {}); return status(); }
+        function checkout(id) { const c = state.commits.get(id); if (!c) return { error: 'commit not found' }; state.index = {}; state.working = U.deepClone(c.payload); state.branches.set(state.head.branch, c.id); state.head.commitId = c.id; return status(); }
+        function branch(name) { name = String(name || '').trim(); if (!name) return { error: 'branch name required' }; state.branches.set(name, state.head.commitId); return { ok: true, branch: name, head: state.head.commitId }; }
+        function checkoutBranch(name) { name = String(name || '').trim(); if (!state.branches.has(name)) return { error: 'branch not found' }; const id = state.branches.get(name); state.head = { branch: name, commitId: id }; state.index = {}; state.working = U.deepClone(state.commits.get(id)?.payload || {}); return status(); }
+
         return { init, status, stage, working, index, commit, log, diff, checkout, branch, checkoutBranch };
       })();
 
-      // NLPGit facade
-      const NLPGit = {
-        init: (p) => Repo.init(p),
-        handle(text) { const cmd = parseNLP(text); if (cmd.type === 'stage') { if (cmd.replace) return Repo.stage({ __replace: cmd.delta }, { overwrite: true }); return Repo.stage(cmd.delta); } return { noop: true }; },
-        stage: (d, opts) => Repo.stage(d, opts),
-        commit: (m) => Repo.commit(m),
-        log: (n) => Repo.log(n),
-        diff: (a, b) => Repo.diff(a, b),
-        status: () => Repo.status(),
-        branch: (n) => Repo.branch(n),
-        checkoutBranch: (n) => Repo.checkoutBranch(n),
-        checkout: (id) => Repo.checkout(id),
-        current: () => Repo.working(),
-        index: () => Repo.index(),
-        render: (targetId = 'centerContent') => {
-          const payload = Repo.working();
-          const view = { tagname: 'div', id: genId('card'), 0: payload };
-          preprocessView(view);
-          if (typeof global.modala === 'function') global.modala(view, targetId);
-          else document.getElementById(targetId)?.replaceChildren(document.createTextNode('modala() not found.'));
+      // ——————————————————————————————————————————————————————
+      // NLPGit: render via modala (single root) + NLP
+      // ——————————————————————————————————————————————————————
+      App.NLPGit = (function () {
+        function annotatePaths(node, path = 'root') {
+          if (!node || typeof node !== 'object') return;
+          node.attributes = node.attributes && typeof node.attributes === 'object' ? node.attributes : {};
+          node.attributes['data-tree-path'] = path;
+          Object.keys(node).filter(k => /^\d+$/.test(k)).sort((a, b) => Number(a) - Number(b))
+            .forEach(k => annotatePaths(node[k], path + '/' + k));
+        }
+        function applyPreviewFocus(path) {
+          const host = $(App.state.LAST_PREVIEW_TARGET_ID || 'centerContent'); if (!host) return;
+          host.querySelectorAll('[data-tree-path].preview-focus').forEach(el => el.classList.remove('preview-focus'));
+          if (!path) return;
+          const el = host.querySelector(`[data-tree-path="${CSS.escape(path)}"]`); if (!el) return;
+          el.classList.add('preview-focus');
+          if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+          try { el.focus({ preventScroll: false }); } catch { }
+          el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        }
+
+        // Fallback renderer if modala is missing
+        function renderBasic(node, parent) {
+          if (!node || typeof node !== 'object') return;
+          const tag = (node.tagname || node.tagName || 'div').toString();
+          const el = document.createElement(tag);
+          const attrs = { ...(node.attributes || {}) };
+          for (const [k, v] of Object.entries(node)) {
+            if (/^\d+$/.test(k)) continue;
+            if (['tagname', 'tagName', 'textContent', 'innerHTML', 'innerText', 'attributes', 'header'].includes(k)) continue;
+            attrs[k] = v;
+          }
+          Object.entries(attrs).forEach(([k, v]) => { if (v === true) el.setAttribute(k, ''); else if (v !== false && v != null) el.setAttribute(k, String(v)); });
+          if ('textContent' in node) el.textContent = String(node.textContent);
+          if ('innerHTML' in node) el.innerHTML = String(node.innerHTML);
+          if ('innerText' in node) el.innerText = String(node.innerText);
+          Object.keys(node).forEach(k => { if (/^\d+$/.test(k) && node[k] && typeof node[k] === 'object') renderBasic(node[k], el); });
+          parent.appendChild(el);
+        }
+
+        function render(targetId = 'centerContent') {
+          App.state.LAST_PREVIEW_TARGET_ID = typeof targetId === 'string'
+            ? targetId
+            : (targetId?.id || 'centerContent');
+
+          // Always render from Working
+          const node = Working.get();
+          if (!node || !isModalaNode(node)) {
+            const host = document.getElementById(App.state.LAST_PREVIEW_TARGET_ID);
+            if (host) host.textContent = 'No working JSON loaded (or invalid).';
+            return;
+          }
+
+          // annotate data-tree-paths for preview focus
+          function annotate(node, path = 'root') {
+            node.attributes = node.attributes && typeof node.attributes === 'object' ? node.attributes : {};
+            node.attributes['data-tree-path'] = path;
+            Object.keys(node).filter(k => /^\d+$/.test(k)).sort((a, b) => a - b).forEach(k => annotate(node[k], path + '/' + k));
+          }
+          const copy = JSON.parse(JSON.stringify(node));
+          annotate(copy, 'root');
+
+          const view = { tagname: 'div', id: App.utils.genId('card'), 0: copy };
+          App.utils.preprocessView(view);
+
+          const host = typeof targetId === 'string' ? document.getElementById(targetId) : targetId;
+          if (!host) return;
+          host.replaceChildren(); // FULL CLEAR
+
+          try {
+            if (typeof window.modala === 'function') {
+              window.modala(view, host); // pass element
+            } else {
+              // basic fallback
+              // re-use your renderBasic if defined
+              if (typeof renderBasic === 'function') renderBasic(view, host);
+              else host.textContent = 'modala() not found.';
+            }
+          } catch (e) { host.textContent = 'Render failed'; console.error(e); }
+
+          // Rebuild tree + reselect (if you keep an interactive tree)
+          if (typeof App.Tree?.render === 'function') App.Tree.render();
+          const sel = App.state.TREE_SELECTED_PATH || App.utils.loadSelectedPath();
+          if (sel && typeof App.Tree?.select === 'function') App.Tree.select(sel, true);
+        };
+        // NLP staging (quick)
+        function parseNLP(text) {
+          const attrsObj = U.parseObjectLikeAttributes(text), kv = U.parseKeyValuePairs(text);
+          const newTag = text.match(/\b(?:new|create|make)\b\s+(?:a\s+)?(?:tag|tagname)?\s*([a-z][a-z0-9-]*)/i);
+          if (newTag) { const tagname = newTag[1]; const content = U.firstQuoted(text); const attrs = { ...attrsObj, ...kv }; return { type: 'stage', delta: { tagname, attributes: attrs, ...(content ? { textContent: content } : {}) }, replace: true }; }
+          if (/\badd\s+class\b/i.test(text)) return { type: 'stage', delta: { classAdd: text.replace(/^[\s\S]*?\bclass\b/i, '').trim() } };
+          if (/\bremove\s+class\b/i.test(text)) return { type: 'stage', delta: { classRemove: text.replace(/^[\s\S]*?\bclass\b/i, '').trim() } };
+          if (/\btoggle\s+class\b/i.test(text)) return { type: 'stage', delta: { classToggle: text.replace(/^[\s\S]*?\bclass\b/i, '').trim() } };
+          const repl = text.match(/\breplace\s+class\s+([^\s]+)\s+with\s+([^\s]+)/i);
+          if (repl) return { type: 'stage', delta: { classReplace: [[repl[1], repl[2]]] } };
+          const exact = text.match(/\bset\s+class\s+exact(?:ly)?\s+"([^"]+)"/i); if (exact) return { type: 'stage', delta: { classSetExactly: exact[1] } };
+          const styleB = text.match(/\bstyle\s*:\s*"([^"]+)"/i) || text.match(/\bstyle\s+(.+)$/i);
+          if (styleB) return { type: 'stage', delta: { style: (styleB[1] || styleB[0].replace(/^style\s*/i, '')).replace(/^:/, '').trim() } };
+          if (/\battributes\s*:/i.test(text) || /=/.test(text)) return { type: 'stage', delta: { attributes: { ...attrsObj, ...kv } } };
+          if (/\btextcontent\b/i.test(text)) return { type: 'stage', delta: { textContent: U.firstQuoted(text) || '' } };
+          if (/\binnerhtml\b/i.test(text)) return { type: 'stage', delta: { innerHTML: U.firstQuoted(text) || '' } };
+          const maybeText = U.firstQuoted(text); if (maybeText != null) return { type: 'stage', delta: { textContent: maybeText } };
+          return { type: 'noop' };
+        }
+
+        function handle(text) {
+          const cmd = parseNLP(text);
+          if (cmd.type === 'stage') {
+            if (cmd.replace) return App.Repo.stage({ __replace: cmd.delta }, { overwrite: true });
+            return App.Repo.stage(cmd.delta);
+          }
+          return { noop: true };
+        }
+
+        return {
+          init: (p) => App.Repo.init(p),
+          handle,
+          stage: (d, o) => App.Repo.stage(d, o),
+          commit: (m) => App.Repo.commit(m),
+          log: (n) => App.Repo.log(n),
+          diff: (a, b) => App.Repo.diff(a, b),
+          status: () => App.Repo.status(),
+          branch: (n) => App.Repo.branch(n),
+          checkoutBranch: (n) => App.Repo.checkoutBranch(n),
+          checkout: (id) => App.Repo.checkout(id),
+          current: () => App.Repo.working(),
+          index: () => App.Repo.index(),
+          render
+        };
+      })();
+
+      // -------- Working: single source of truth for the current modala JSON --------
+      const Working = (() => {
+        let current = null;
+
+        function deepClone(x) { return JSON.parse(JSON.stringify(x)); }
+        function isModalaNode(x) {
+          return x && typeof x === 'object' && !Array.isArray(x) &&
+            typeof x.tagname === 'string' && x.tagname.length > 0;
+        }
+        function coerceToModalaNode(x) {
+          if (isModalaNode(x)) return x;
+          if (x && typeof x === 'object' && isModalaNode(x['0'])) return x['0']; // unwrap wrapper
+          return null;
+        }
+
+        return {
+          ensure(node) {
+            const n = coerceToModalaNode(node);
+            if (!n) throw new Error('Payload is not a valid modala node (needs {"tagname":"..."}).');
+            return n;
+          },
+          load(node) {
+            current = deepClone(this.ensure(node));
+            return this.get();
+          },
+          get() {
+            return current ? deepClone(current) : null;
+          },
+          update(mutator) {
+            if (!current) throw new Error('No working JSON loaded. Import or init first.');
+            const draft = deepClone(current);
+            const out = mutator(draft) || draft;
+            current = out;
+            return this.get();
+          },
+          reset(stub = { tagname: 'div', attributes: { id: App.utils.genId('node'), class: 'page' } }) {
+            current = deepClone(stub);
+            return this.get();
+          }
+        };
+      })();
+
+      // ——————————————————————————————————————————————————————
+      // Tree (HTML buttons, selection/accordion/keys)
+      // ——————————————————————————————————————————————————————
+      // ——————————————————————————————————————————————————————
+      // Tree (enhanced): Properties + Children per node
+      // ——————————————————————————————————————————————————————
+      App.Tree = (function () {
+        // Helpers
+        function isNode(x) { return x && typeof x === 'object' && !Array.isArray(x) && typeof x.tagname === 'string'; }
+        function getChildren(node) {
+          return Object.keys(node).filter(k => /^\d+$/.test(k))
+            .sort((a, b) => Number(a) - Number(b))
+            .map(k => ({ key: k, val: node[k] }))
+            .filter(({ val }) => isNode(val));
+        }
+        function nodeLabel(node) {
+          const tag = App.utils.esc(node.tagname || 'div');
+          const id = node.attributes?.id ? '#' + App.utils.esc(node.attributes.id) : '';
+          const cls = node.attributes?.class ? '.' + App.utils.esc(String(node.attributes.class).split(/\s+/)[0] || '') : '';
+          return `${tag}${id}${cls}`;
+        }
+        function makeNodeButton(node, path) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'node-btn';
+          btn.dataset.path = path;
+          btn.setAttribute('role', 'treeitem');
+          btn.setAttribute('aria-selected', 'false');
+
+          const label = document.createElement('span');
+          label.className = 'node-tag';
+          label.textContent = nodeLabel(node);
+          btn.appendChild(label);
+
+          const meta = document.createElement('span');
+          meta.className = 'node-meta';
+          if ('textContent' in node && String(node.textContent).length) meta.textContent = ` · text(${String(node.textContent).length})`;
+          else if ('innerHTML' in node && String(node.innerHTML).length) meta.textContent = ` · html(${String(node.innerHTML).length})`;
+          if (meta.textContent) btn.appendChild(meta);
+
+          // Tooltip: attributes at a glance
+          const attrs = node.attributes || {};
+          const keys = Object.keys(attrs);
+          if (keys.length) btn.title = keys.map(k => `${k}=${JSON.stringify(attrs[k])}`).join(' ');
+          return btn;
+        }
+
+        // Properties panel for a node
+        function buildProps(node) {
+          const wrap = document.createElement('div');
+          wrap.className = 'prop-group';
+
+          const title = document.createElement('div');
+          title.className = 'prop-title';
+          title.textContent = 'Properties';
+          wrap.appendChild(title);
+
+          // tagname
+          wrap.appendChild(makePropRow('tagname', node.tagname || 'div'));
+
+          // attributes (flatten each key/value)
+          const attrs = node.attributes || {};
+          const keys = Object.keys(attrs);
+          if (keys.length) {
+            wrap.appendChild(makePropRow('attributes', ''));
+            keys.forEach(k => wrap.appendChild(makePropRow('• ' + k, String(attrs[k]))));
+          }
+
+          // textContent / innerHTML
+          if (node.hasOwnProperty('textContent') && String(node.textContent).length) {
+            wrap.appendChild(makePropRow('textContent', String(node.textContent)));
+          }
+          if (node.hasOwnProperty('innerHTML') && String(node.innerHTML).length) {
+            wrap.appendChild(makePropRow('innerHTML', String(node.innerHTML)));
+          }
+          return wrap;
+        }
+        function makePropRow(k, v) {
+          const row = document.createElement('div');
+          row.className = 'prop-row';
+          const key = document.createElement('div'); key.className = 'prop-k'; key.textContent = k;
+          const val = document.createElement('div'); val.className = 'prop-v'; val.textContent = v;
+          row.appendChild(key); row.appendChild(val);
+          return row;
+        }
+
+        // Children panel: clickable child nodes (buttons), drill-down recursively
+        function buildChildren(node, path) {
+          const kids = getChildren(node);
+          const wrap = document.createElement('div');
+          wrap.className = 'prop-group';
+
+          const title = document.createElement('div');
+          title.className = 'prop-title';
+          title.textContent = `Children (${kids.length})`;
+          wrap.appendChild(title);
+
+          if (!kids.length) {
+            wrap.appendChild(makePropRow('—', 'no children'));
+            return wrap;
+          }
+
+          // List each child as a collapsible node
+          const ul = document.createElement('ul');
+          kids.forEach(({ key, val }) => {
+            const li = document.createElement('li');
+            const details = document.createElement('details'); details.open = true; details.dataset.path = `${path}/${key}`;
+
+            const summary = document.createElement('summary');
+            summary.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); });
+
+            const arrow = document.createElement('span');
+            arrow.className = 'summary-arrow';
+            arrow.textContent = '▸';
+
+            const btn = makeNodeButton(val, `${path}/${key}`);
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              select(`${path}/${key}`, true);
+              setBranchOpen(`${path}/${key}`, !details.open);
+            });
+
+            summary.appendChild(arrow);
+            summary.appendChild(btn);
+            details.appendChild(summary);
+
+            // Recurse: show this child’s Properties + Children
+            const props = buildProps(val);
+            const kidsWrap = buildChildren(val, `${path}/${key}`);
+            const container = document.createElement('div');
+            container.appendChild(props);
+            container.appendChild(kidsWrap);
+            details.appendChild(container);
+
+            li.appendChild(details);
+            ul.appendChild(li);
+          });
+
+          wrap.appendChild(ul);
+          return wrap;
+        }
+
+        // Build one full node item with Properties + Children
+        function buildNodeItem(node, path) {
+          const li = document.createElement('li');
+          li.dataset.path = path;
+
+          const details = document.createElement('details'); details.open = true; details.dataset.path = path;
+
+          const summary = document.createElement('summary');
+          summary.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); });
+
+          const arrow = document.createElement('span');
+          arrow.className = 'summary-arrow';
+          arrow.textContent = '▸';
+
+          const btn = makeNodeButton(node, path);
+          btn.setAttribute('aria-expanded', 'true');
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            select(path, true);
+            setBranchOpen(path, !details.open);
+          });
+
+          summary.appendChild(arrow);
+          summary.appendChild(btn);
+          details.appendChild(summary);
+
+          // Panels
+          const propsPanel = buildProps(node);
+          const childrenPanel = buildChildren(node, path);
+
+          const container = document.createElement('div');
+          container.appendChild(propsPanel);
+          container.appendChild(childrenPanel);
+          details.appendChild(container);
+
+          li.appendChild(details);
+          return li;
+        }
+
+        // Render the whole tree starting from root
+        function render() {
+          const host = $('treeHtml'); if (!host) return;
+          host.innerHTML = '';
+
+          const working = (typeof Working?.get === 'function') ? Working.get() : App.NLPGit.current();
+          const rootNode = App.utils.coerceToModalaNode(working);
+
+          if (!rootNode) {
+            const d = document.createElement('div'); d.className = 'muted';
+            d.textContent = 'No payload to visualize.'; host.appendChild(d);
+            return;
+          }
+
+          const ul = document.createElement('ul');
+          ul.className = 'tree';
+          ul.setAttribute('role', 'tree');
+          ul.setAttribute('aria-label', 'Root');
+
+          ul.appendChild(buildNodeItem(rootNode, 'root'));
+          host.appendChild(ul);
+
+          // Restore selection and keyboard
+          restoreSelection();
+          enableKeys();
+
+          // Delegated clicks (ensure selection works even after rebuild)
+          host.addEventListener('click', (e) => {
+            const b = e.target.closest('.node-btn'); if (!b) return;
+            e.stopPropagation(); select(b.dataset.path, true);
+          }, { once: true });
+        }
+
+        // Accordion: when a branch opens, close siblings
+        function setBranchOpen(path, open) {
+          const host = $('treeHtml'); if (!host) return;
+          const d = host.querySelector(`details[data-path="${CSS.escape(path)}"]`); if (!d) return;
+          d.open = !!open;
+          const btn = d.querySelector('summary .node-btn'); if (btn) btn.setAttribute('aria-expanded', String(d.open));
+          if (App.state.ACCORDION && d.open) {
+            const p = d.parentElement?.parentElement; if (p) p.querySelectorAll(':scope > li > details').forEach(sib => { if (sib !== d) sib.open = false; });
+          }
+        }
+
+        // Select a node button and persist the path
+        function select(path, focus = true) {
+          const host = $('treeHtml'); if (!host) return;
+          host.querySelectorAll('.node-btn.selected').forEach(b => { b.classList.remove('selected'); b.setAttribute('aria-selected', 'false'); });
+
+          // Expand ancestors so the button exists
+          let el = host.querySelector(`[data-path="${CSS.escape(path)}"]`);
+          while (el) { const d = el.closest('details'); if (d) d.open = true; el = el.parentElement?.closest('[data-path]'); }
+
+          const btn = host.querySelector(`.node-btn[data-path="${CSS.escape(path)}"]`); if (!btn) return;
+          btn.classList.add('selected');
+          btn.setAttribute('aria-selected', 'true');
+          App.state.TREE_SELECTED_PATH = path;
+          App.utils.rememberSelectedPath(path);
+
+          if (focus) {
+            try { btn.focus({ preventScroll: false }); } catch { }
+            btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+          }
+        }
+
+        function visibleButtons() {
+          const host = $('treeHtml'); if (!host) return [];
+          return qsa('.node-btn', host).filter(b => !b.closest('details:not([open])'));
+        }
+
+        function restoreSelection() {
+          const host = $('treeHtml'); if (!host) return;
+          let path = App.state.TREE_SELECTED_PATH || App.utils.loadSelectedPath() || 'root';
+          let btn = host.querySelector(`.node-btn[data-path="${CSS.escape(path)}"]`);
+
+          if (!btn && path) {
+            const fallback = App.Path?.parentPath ? App.Path.parentPath(path) : 'root';
+            btn = host.querySelector(`.node-btn[data-path="${CSS.escape(fallback)}"]`);
+            if (btn) path = fallback;
+          }
+          if (!btn) {
+            const first = visibleButtons()[0];
+            if (first) path = first.dataset.path || 'root';
+          }
+          if (path) select(path, false);
+        }
+
+        function enableKeys() {
+          const host = $('treeHtml'); if (!host) return;
+          host.addEventListener('keydown', (e) => {
+            const vis = visibleButtons(); if (!vis.length) return;
+            const focusedIsNode = document.activeElement?.classList?.contains('node-btn');
+            const current = focusedIsNode ? document.activeElement : host.querySelector('.node-btn.selected');
+            const idx = Math.max(0, vis.indexOf(current)); const btn = vis[idx];
+
+            if (e.key === 'ArrowDown') { e.preventDefault(); const next = vis[Math.min(vis.length - 1, idx + 1)]; if (next) select(next.dataset.path, true); return; }
+            if (e.key === 'ArrowUp') { e.preventDefault(); const prev = vis[Math.max(0, idx - 1)]; if (prev) select(prev.dataset.path, true); return; }
+            if (e.key === 'ArrowRight') { e.preventDefault(); const d = btn.closest('details'); if (d && !d.open) setBranchOpen(d.dataset.path, true); else if (d && d.open) { const fc = d.querySelector('ul .node-btn'); if (fc) select(fc.dataset.path, true); } return; }
+            if (e.key === 'ArrowLeft') { e.preventDefault(); const d = btn.closest('details'); if (d && d.open) setBranchOpen(d.dataset.path, false); else { const p = d?.parentElement?.closest('details')?.querySelector('summary .node-btn'); if (p) select(p.dataset.path, true); } return; }
+            if (e.key === 'Home') { e.preventDefault(); select(vis[0].dataset.path, true); return; }
+            if (e.key === 'End') { e.preventDefault(); select(vis[vis.length - 1].dataset.path, true); return; }
+            if (e.key === 'Enter' || e.key === ' ') { const d = btn.closest('details'); if (d) { e.preventDefault(); setBranchOpen(d.dataset.path, !d.open); } }
+          });
+        }
+
+        return { render, select, setBranchOpen };
+      })();
+
+      // ——————————————————————————————————————————————————————
+      // UI Panels
+      // ——————————————————————————————————————————————————————
+      App.UI = {
+        refreshPanels() {
+          $('payloadPre').textContent = JSON.stringify(App.NLPGit.current(), null, 2);
+          $('indexPre').textContent = JSON.stringify(App.NLPGit.index(), null, 2);
+          $('logPre').textContent = JSON.stringify(App.NLPGit.log(), null, 2);
+          $('diffPre').textContent = JSON.stringify(App.NLPGit.diff(), null, 2);
         }
       };
-      global.NLPGit = NLPGit;
 
-      // UI wiring
-      const $ = id => document.getElementById(id);
-      const status = $('status');
-      function refreshPanels() {
-        $('payloadPre').textContent = JSON.stringify(NLPGit.current(), null, 2);
-        $('indexPre').textContent = JSON.stringify(NLPGit.index(), null, 2);
-        $('logPre').textContent = JSON.stringify(NLPGit.log(), null, 2);
-        $('diffPre').textContent = JSON.stringify(NLPGit.diff(), null, 2);
-      }
+      // ——————————————————————————————————————————————————————
+      // Actions toolbar: Add/Insert/Set/Wrap/Replace/Delete
+      // ——————————————————————————————————————————————————————
+      App.Actions = (function () {
+        function stageReplaceRender(newNode, nextPath) {
+          App.NLPGit.stage({ __replace: newNode }, { overwrite: true });
+          App.UI.refreshPanels();
+          const tgt = ($('quickTarget')?.value.trim() || 'centerContent');
+          App.NLPGit.render(tgt);
+          const finalPath = nextPath || App.state.TREE_SELECTED_PATH || App.utils.loadSelectedPath() || '';
+          if (finalPath) setTimeout(() => App.Tree.select(finalPath, true), 0);
+        }
+        function makeStub() { return { tagname: 'div', attributes: { id: App.utils.genId('node') }, textContent: '' }; }
+        function bind() {
+          const bar = $('treeActions'); if (!bar) return;
+          bar.addEventListener('click', (e) => {
+            const id = e.target.id; if (!id) return;
+            const sel = App.state.TREE_SELECTED_PATH || App.utils.loadSelectedPath() || 'root';
+            const current = App.NLPGit.current(); const root = App.utils.coerceToModalaNode(current);
+            if (!root) return alert('Current payload is not a modala node.');
+            const clone = App.utils.deepClone(root);
+            try {
+              if (id === 'treeAddChild') {
+                const raw = prompt('New child JSON', '{"tagname":"div","textContent":"Hello"}'); if (!raw) return;
+                const child = JSON.parse(raw); const newPath = App.Path.addChild(clone, sel, child);
+                if (!newPath) return alert('Invalid path: ' + sel);
+                stageReplaceRender(clone, newPath); return;
+              }
+              if (id === 'treeSetText') {
+                const text = prompt('textContent', ''); if (text == null) return;
+                const node = App.Path.get(clone, sel); if (!node) return alert('Invalid path');
+                delete node.innerHTML; delete node.innerText; node.textContent = text;
+                stageReplaceRender(clone, sel); return;
+              }
+              if (id === 'treeSetHTML') {
+                const html = prompt('innerHTML', '<b>Hi</b>'); if (html == null) return;
+                const node = App.Path.get(clone, sel); if (!node) return alert('Invalid path');
+                delete node.textContent; delete node.innerText; node.innerHTML = html;
+                stageReplaceRender(clone, sel); return;
+              }
+              if (id === 'treeSetAttrs') {
+                const raw = prompt('attributes JSON (merged)', '{"class":"card","style":"padding:8px"}'); if (!raw) return;
+                const attrs = JSON.parse(raw); const node = App.Path.get(clone, sel); if (!node) return alert('Invalid path');
+                node.attributes = { ...(node.attributes || {}), ...attrs };
+                stageReplaceRender(clone, sel); return;
+              }
+              if (id === 'treeWrap') {
+                const raw = prompt('Wrapper JSON', '{"tagname":"div","attributes":{"class":"wrapper"}}'); if (!raw) return;
+                const wrapDef = JSON.parse(raw); const old = App.Path.get(clone, sel); if (!old) return alert('Invalid path');
+                const wrapped = App.utils.deepClone(wrapDef); wrapped['0'] = old; App.Path.set(clone, sel, wrapped);
+                stageReplaceRender(clone, sel); return;
+              }
+              if (id === 'treeReplace') {
+                const raw = prompt('Replace node with JSON', '{"tagname":"span","textContent":"Replaced"}'); if (!raw) return;
+                const newNode = JSON.parse(raw); const newPath = App.Path.set(clone, sel, newNode);
+                stageReplaceRender(clone, newPath || sel); return;
+              }
+              if (id === 'treeDelete') {
+                if (!confirm(sel === 'root' ? 'Replace root with stub?' : 'Delete selected node?')) return;
+                if (sel === 'root') { App.Path.set(clone, 'root', makeStub()); stageReplaceRender(clone, 'root'); }
+                else { const parent = App.Path.del(clone, sel); stageReplaceRender(clone, parent); }
+                return;
+              }
+            } catch (err) { console.error('[tree action]', err); alert('Invalid input.'); }
+          });
+        }
+        return { bind, stageReplaceRender };
+      })();
 
-      // Initialize repo
-      NLPGit.init({ tagname: 'div', attributes: { id: genId('node'), class: 'box' }, textContent: 'Hello' });
-      refreshPanels();
-
+      // ——————————————————————————————————————————————————————
       // CLI
-      const cliIn = $('cliInput'), cliOut = $('cliOut');
-      function printLine(s) { const d = document.createElement('div'); d.textContent = s; cliOut.appendChild(d); cliOut.scrollTop = cliOut.scrollHeight; }
-      function printJSON(obj) { const d = document.createElement('pre'); d.textContent = JSON.stringify(obj, null, 2); cliOut.appendChild(d); cliOut.scrollTop = cliOut.scrollHeight; }
+      // ——————————————————————————————————————————————————————
+      App.CLI = (function () {
+        function printLine(s) { const d = document.createElement('div'); d.textContent = s; $('cliOut').appendChild(d); $('cliOut').scrollTop = $('cliOut').scrollHeight; }
+        function printJSON(obj) { const d = document.createElement('pre'); d.textContent = JSON.stringify(obj, null, 2); $('cliOut').appendChild(d); $('cliOut').scrollTop = $('cliOut').scrollHeight; }
 
-      const Commands = {
-        help() { printLine('Commands: init, nlp, new, stage, commit, status, log, diff, undo, branch, checkout, show, render, class, style, attr, export, import, stash'); },
-        init(args) { if (args.length) { try { printJSON(NLPGit.init(JSON.parse(args.join(' ')))); } catch { printJSON(NLPGit.init()); } } else printJSON(NLPGit.init()); },
-        nlp(args) { const t = args.join(' ').replace(/^"|"$/g, ''); NLPGit.handle(t); refreshPanels(); printLine('staged (nlp)'); },
-        new(args) { const t = 'new ' + args.join(' '); NLPGit.handle(t); refreshPanels(); printLine('staged (new)'); },
-        stage(args) { try { NLPGit.stage(JSON.parse(args.join(' '))); refreshPanels(); printLine('staged'); } catch { printLine('stage expects JSON'); } },
-        commit(args) { const c = NLPGit.commit(args.join(' ') || '(no message)'); refreshPanels(); printJSON(c); },
-        status() { printJSON(NLPGit.status()); },
-        log() { printJSON(NLPGit.log()); },
-        diff() { printJSON(NLPGit.diff()); },
-        undo() { const lg = NLPGit.log(); if (lg.length > 1) { const parent = lg[1].id; printJSON(NLPGit.checkout(parent)); refreshPanels(); } else printLine('no parent'); },
-        branch(args) { printJSON(NLPGit.branch(args[0] || '')); },
-        checkout(args) { const id = args[0] || ''; if (!id) { printLine('usage: checkout <id|branch>'); return; } const br = NLPGit.checkoutBranch(id); if (!br.error) { printJSON(br); refreshPanels(); return; } printJSON(NLPGit.checkout(id)); refreshPanels(); },
-        show(args) { const w = (args[0] || 'working').toLowerCase(); if (w === 'working') printJSON(NLPGit.current()); else if (w === 'index') printJSON(NLPGit.index()); else printJSON(NLPGit.log()[0] || {}); },
-        // render(targetId = 'centerContent') {
-        //   const payload = Repo.working();
-        //   const view = { tagname: 'div', id: 'card-' + Math.random().toString(36).slice(2, 8), 0: payload };
-        //   safeRender(view, targetId);
-        // },
-        render(args){ const tgt=args[0]||($('quickTarget').value.trim()||'centerContent'); NLPGit.render(tgt); printLine('rendered → '+tgt); },
-        export() { printJSON(NLPGit.current()); },
-        import(args) { try { NLPGit.stage({ __replace: JSON.parse(args.join(' ')) }, { overwrite: true }); refreshPanels(); printLine('import staged'); } catch { printLine('import expects JSON'); } },
-        class(args) { const sub = (args.shift() || '').toLowerCase(); const tokens = args.join(' '); if (sub === 'add') NLPGit.stage({ classAdd: tokens }); else if (sub === 'remove') NLPGit.stage({ classRemove: tokens }); else if (sub === 'toggle') NLPGit.stage({ classToggle: tokens }); else if (sub === 'replace') { const a = args[0], b = args[1]; NLPGit.stage({ classReplace: [[a, b]] }); } else if (sub === 'set') { NLPGit.stage({ classSetExactly: tokens.replace(/^"|"$/g, '') }); } refreshPanels(); printLine('class ' + sub); },
-        style(args) { NLPGit.stage({ style: args.join(' ').replace(/^"|"$/g, '') }); refreshPanels(); printLine('style merged'); },
-        attr(args) { const sub = (args.shift() || '').toLowerCase(); if (sub === 'set') { const k = args[0], v = args.slice(1).join(' '); const d = { attributes: {} }; d.attributes[k] = v; NLPGit.stage(d); printLine('attr set'); } else if (sub === 'del') { const k = args[0]; const w = NLPGit.current(); const attrs = { ...(w.attributes || {}) }; delete attrs[k]; NLPGit.stage({ attributes: attrs }, { overwrite: true }); printLine('attr del'); } refreshPanels(); }
-      };
-      function exec1(line) {
-        if (!line.trim()) return;
-        printLine('> ' + line);
-        // chaining by &&
-        line.split('&&').map(s => s.trim()).filter(Boolean).forEach(cmdline => {
-          const tokens = cmdline.match(/"[^"]*"|'[^']*'|\S+/g) || [];
-          const cmd = (tokens.shift() || '').toLowerCase();
-          if (Commands[cmd]) Commands[cmd](tokens);
-          else Commands.nlp([cmd, ...tokens]); // fallback to NLP
-        });
+        const Commands = {
+          help() { printLine('Commands: init, nlp, new, stage, commit, status, log, diff, undo, branch, checkout, show, render, class, style, attr, export, import, node, clear'); },
+
+          init(args) { if (args.length) { try { printJSON(App.NLPGit.init(JSON.parse(args.join(' ')))); } catch { printJSON(App.NLPGit.init()); } } else printJSON(App.NLPGit.init()); App.Tree.render(); App.UI.refreshPanels(); },
+
+          nlp(args) { const t = args.join(' ').replace(/^"|"$/g, ''); App.NLPGit.handle(t); App.UI.refreshPanels(); printLine('staged (nlp)'); },
+          new(args) { const t = 'new ' + args.join(' '); App.NLPGit.handle(t); App.UI.refreshPanels(); printLine('staged (new)'); },
+          stage(args) { try { App.NLPGit.stage(JSON.parse(args.join(' '))); App.UI.refreshPanels(); printLine('staged'); } catch { printLine('stage expects JSON'); } },
+
+          commit(args) { const c = App.NLPGit.commit(args.join(' ') || '(no message)'); App.UI.refreshPanels(); printJSON(c); const tgt = ($('quickTarget').value.trim() || 'centerContent'); App.NLPGit.render(tgt); },
+
+          status() { printJSON(App.NLPGit.status()); }, log() { printJSON(App.NLPGit.log()); }, diff() { printJSON(App.NLPGit.diff()); },
+
+          undo() { const lg = App.NLPGit.log(); if (lg.length > 1) { const parent = lg[1].id; const res = App.NLPGit.checkout(parent); App.UI.refreshPanels(); const tgt = ($('quickTarget').value.trim() || 'centerContent'); App.NLPGit.render(tgt); printLine('undo → ' + parent + ' (rendered → ' + tgt + ')'); printJSON(res); } else printLine('no parent'); },
+
+          branch(args) { printJSON(App.NLPGit.branch(args[0] || '')); },
+          checkout(args) {
+            const id = args[0] || ''; if (!id) return printLine('usage: checkout <id|branch>');
+            const br = App.NLPGit.checkoutBranch(id);
+            if (!br.error) { printJSON(br); App.UI.refreshPanels(); const tgt = ($('quickTarget').value.trim() || 'centerContent'); App.NLPGit.render(tgt); printLine('rendered → ' + tgt); return; }
+            const res = App.NLPGit.checkout(id); printJSON(res); App.UI.refreshPanels(); const tgt = ($('quickTarget').value.trim() || 'centerContent'); App.NLPGit.render(tgt); printLine('rendered → ' + tgt);
+          },
+
+          show(args) { const w = (args[0] || 'working').toLowerCase(); if (w === 'working') printJSON(App.NLPGit.current()); else if (w === 'index') printJSON(App.NLPGit.index()); else printJSON(App.NLPGit.log()[0] || {}); },
+          render(args) {
+            const tgt = args[0] || ($('quickTarget').value.trim() || 'centerContent');
+            App.NLPGit.render(tgt);
+            App.CLI.printLine('rendered → ' + tgt);
+          },
+
+
+          // inside Commands
+          exportfile(args) {
+            const name = args[0] || 'payload.json';
+            const node = (typeof Working?.get === 'function' && Working.get()) || App.NLPGit.current();
+            downloadJSON(node, name);
+            printLine('saved ' + name);
+          },
+          import(args) {
+            try {
+              const raw = JSON.parse(args.join(' '));
+              Working.load(raw);
+              // mirror into Repo so right-side inspector panels show the same
+              App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true });
+              App.UI.refreshPanels();
+              App.CLI.printLine('imported into Working');
+            } catch { App.CLI.printLine('import expects JSON'); }
+          },
+
+          class(args) {
+            const sub = (args.shift() || '').toLowerCase();
+            const tokens = args.join(' ');
+            if (!Working.get()) return App.CLI.printLine('No working JSON loaded.');
+            Working.update(draft => {
+              const a = draft.attributes || (draft.attributes = {});
+              if (sub === 'add') a.class = App.utils.mergeClass(a.class, tokens);
+              else if (sub === 'remove') a.class = App.utils.removeClassTokens(a.class, tokens);
+              else if (sub === 'toggle') a.class = App.utils.toggleClassTokens(a.class, tokens);
+              else if (sub === 'replace') { const [from, to] = tokens.split(/\s+/); a.class = App.utils.replaceClassToken(a.class, from, to); }
+              else if (sub === 'set') a.class = tokens.replace(/^"|"$/g, '');
+            });
+            App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true });
+            App.UI.refreshPanels(); App.NLPGit.render($('quickTarget').value.trim() || 'centerContent');
+            App.CLI.printLine('class ' + sub);
+          },
+          style(args) {
+            if (!Working.get()) return App.CLI.printLine('No working JSON loaded.');
+            const add = args.join(' ').replace(/^"|"$/g, '');
+            Working.update(draft => {
+              const a = draft.attributes || (draft.attributes = {});
+              a.style = App.utils.mergeStyle(a.style, add);
+            });
+            App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true });
+            App.UI.refreshPanels(); App.NLPGit.render($('quickTarget').value.trim() || 'centerContent');
+            App.CLI.printLine('style merged');
+          },
+          attr(args) {
+            if (!Working.get()) return App.CLI.printLine('No working JSON loaded.');
+            const sub = (args.shift() || '').toLowerCase();
+            if (sub === 'set') {
+              const k = args[0], v = args.slice(1).join(' ');
+              Working.update(draft => { const a = draft.attributes || (draft.attributes = {}); a[k] = v; });
+              App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true });
+              App.UI.refreshPanels(); App.NLPGit.render($('quickTarget').value.trim() || 'centerContent');
+              App.CLI.printLine('attr set');
+            } else if (sub === 'del') {
+              const k = args[0];
+              Working.update(draft => { const a = draft.attributes || (draft.attributes = {}); delete a[k]; });
+              App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true });
+              App.UI.refreshPanels(); App.NLPGit.render($('quickTarget').value.trim() || 'centerContent');
+              App.CLI.printLine('attr del');
+            }
+          },
+          node(args) {
+            const sub = (args.shift() || '').toLowerCase();
+            const sel = App.state.TREE_SELECTED_PATH || App.utils.loadSelectedPath() || 'root';
+            if (!Working.get()) return App.CLI.printLine('No working JSON loaded. Import/init first.');
+
+            if (sub === 'addchild') {
+              try {
+                const child = JSON.parse(args.join(' '));
+                let newPath = null;
+                Working.update(draft => { newPath = addChildAtPath(draft, sel, child); return draft; });
+                if (!newPath) return App.CLI.printLine('Invalid path: ' + sel);
+                App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true });
+                App.UI.refreshPanels(); App.NLPGit.render($('quickTarget').value.trim() || 'centerContent');
+                setTimeout(() => App.Tree?.select?.(newPath, true), 0);
+                App.CLI.printLine('node addchild → ' + newPath);
+              } catch { App.CLI.printLine('node addchild expects JSON'); }
+              return;
+            }
+
+            if (sub === 'insertat') {
+              const idx = parseInt(args.shift(), 10);
+              if (isNaN(idx)) return App.CLI.printLine('node insertAt <index> <json>');
+              try {
+                const child = JSON.parse(args.join(' '));
+                let newPath = null;
+                Working.update(draft => { newPath = insertChildAt(draft, sel, idx, child); return draft; });
+                if (!newPath) return App.CLI.printLine('Invalid path');
+                App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true });
+                App.UI.refreshPanels(); App.NLPGit.render($('quickTarget').value.trim() || 'centerContent');
+                setTimeout(() => App.Tree?.select?.(newPath, true), 0);
+                App.CLI.printLine('node insertAt → ' + newPath);
+              } catch { App.CLI.printLine('node insertAt expects JSON'); }
+              return;
+            }
+
+            if (sub === 'replace') {
+              try {
+                const newNode = JSON.parse(args.join(' '));
+                Working.update(draft => { setAtPath(draft, sel, newNode); });
+                App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true });
+                App.UI.refreshPanels(); App.NLPGit.render($('quickTarget').value.trim() || 'centerContent');
+                setTimeout(() => App.Tree?.select?.(sel, true), 0);
+                App.CLI.printLine('node replace');
+              } catch { App.CLI.printLine('node replace expects JSON'); }
+              return;
+            }
+
+            if (sub === 'wrap') {
+              try {
+                const wrapDef = JSON.parse(args.join(' '));
+                Working.update(draft => { wrapAtPath(draft, sel, wrapDef); });
+                App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true });
+                App.UI.refreshPanels(); App.NLPGit.render($('quickTarget').value.trim() || 'centerContent');
+                setTimeout(() => App.Tree?.select?.(sel, true), 0);
+                App.CLI.printLine('node wrap');
+              } catch { App.CLI.printLine('node wrap expects JSON'); }
+              return;
+            }
+
+            if (sub === 'settext') {
+              const txt = args.join(' ').replace(/^"|"$/g, '');
+              Working.update(draft => { setTextAtPath(draft, sel, txt); });
+              App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true });
+              App.UI.refreshPanels(); App.NLPGit.render($('quickTarget').value.trim() || 'centerContent');
+              setTimeout(() => App.Tree?.select?.(sel, true), 0);
+              App.CLI.printLine('node settext');
+              return;
+            }
+
+            if (sub === 'setattrs') {
+              try {
+                const attrs = JSON.parse(args.join(' '));
+                Working.update(draft => { setAttrsAtPath(draft, sel, attrs); });
+                App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true });
+                App.UI.refreshPanels(); App.NLPGit.render($('quickTarget').value.trim() || 'centerContent');
+                setTimeout(() => App.Tree?.select?.(sel, true), 0);
+                App.CLI.printLine('node setattrs');
+              } catch { App.CLI.printLine('node setattrs expects JSON'); }
+              return;
+            }
+
+            if (sub === 'delete') {
+              Working.update(draft => {
+                if (sel === 'root') {
+                  setAtPath(draft, 'root', { tagname: 'div', attributes: { id: App.utils.genId('node'), class: 'page' } });
+                } else {
+                  deleteAtPath(draft, sel);
+                }
+              });
+              App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true });
+              App.UI.refreshPanels(); App.NLPGit.render($('quickTarget').value.trim() || 'centerContent');
+              // select parent after delete
+              const nextSel = sel === 'root' ? 'root' : splitPath(sel).slice(0, -1).join('/') || 'root';
+              setTimeout(() => App.Tree?.select?.(nextSel, true), 0);
+              App.CLI.printLine('node delete');
+              return;
+            }
+
+            App.CLI.printLine('Usage: node [addchild|insertAt|replace|wrap|settext|setattrs|delete] …');
+          },
+          clear(args) {
+            const what = (args[0] || 'all').toLowerCase();
+            const tgt = $('quickTarget').value.trim() || 'centerContent';
+            const acted = [];
+            if (what === 'all' || what === 'cli') { $('cliOut').innerHTML = ''; acted.push('cli'); }
+            if (what === 'all') {
+              Working.reset(); // reset working JSON to stub
+              App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true });
+              App.UI.refreshPanels();
+              App.state.TREE_SELECTED_PATH = 'root'; App.utils.rememberSelectedPath('root');
+              acted.push('working');
+            }
+            const host = document.getElementById(tgt);
+            if ((what === 'all' || what === 'preview') && host) { host.replaceChildren(); acted.push('preview'); }
+            if (what === 'all' || what === 'panels') {
+              $('payloadPre').textContent = ''; $('indexPre').textContent = ''; $('logPre').textContent = ''; $('diffPre').textContent = '';
+              acted.push('panels');
+            }
+            if (!acted.length) return App.CLI.printLine('Usage: clear [cli|preview|panels|all]');
+            App.CLI.printLine('cleared: ' + acted.join(', '));
+          }
+
+        };
+
+        function exec(line) {
+          if (!line.trim()) return;
+          printLine('> ' + line);
+          line.split('&&').map(s => s.trim()).filter(Boolean).forEach(cmdline => {
+            const tokens = cmdline.match(/"[^"]*"|'[^']*'|\S+/g) || [];
+            const cmd = (tokens.shift() || '').toLowerCase();
+            if (Commands[cmd]) Commands[cmd](tokens);
+            else Commands.nlp([cmd, ...tokens]); // fallback to NLP
+          });
+        }
+
+        function bind() {
+          $('cliRun').onclick = () => { exec($('cliInput').value); $('cliInput').value = ''; };
+          $('cliCommit').onclick = () => { Commands.commit([$('cliInput').value || '(no message)']); $('cliInput').value = ''; };
+          $('cliRender').onclick = () => { Commands.render([]); };
+          $('cliInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); $('cliRun').click(); } });
+          $('renderBtn').onclick = () => { Commands.render([]); };
+        }
+
+        return { Commands, exec, bind, printLine, printJSON };
+      })();
+
+      // ——————————————————————————————————————————————————————
+      // Chips (Shift+Click = run now)
+      // ——————————————————————————————————————————————————————
+      App.Chips = (function () {
+        function addChips(containerId, items) {
+          const c = $(containerId); if (!c) return;
+          items.forEach(({ cmd, label, title, run }) => {
+            const b = document.createElement('button');
+            b.className = 'chip'; b.textContent = label || cmd; if (title) b.title = title;
+            b.onclick = (e) => { const now = run || e.shiftKey; if (now) App.CLI.exec(cmd); else $('cliInput').value = cmd; };
+            c.appendChild(b);
+          });
+        }
+        function populate() {
+          addChips('repoChips', [
+            { cmd: 'status', label: 'status' },
+            { cmd: 'log', label: 'log' },
+            { cmd: 'diff', label: 'diff' },
+            { cmd: 'commit "update"', label: 'commit' },
+            { cmd: 'undo', label: 'undo', run: true },
+            { cmd: 'export', label: 'export' },
+            { cmd: 'import {"tagname":"div","attributes":{"id":"root","class":"card"},"0":{"tagname":"h3","textContent":"Title"}}', label: 'import nested', run: true },
+            { cmd: 'clear all', label: 'clear all' }
+          ]);
+
+          addChips('nlpChips', [
+            { cmd: 'new div tag "Hello" attributes:{id:hero, class:"card"}', label: 'new div "Hello"' },
+            { cmd: 'nlp "textContent \\"Updated\\""', label: 'text "Updated"' },
+            { cmd: 'nlp "attributes:{id:hero, class:card, style:\\"padding:12px\\"}"', label: 'attrs id/class/style' },
+            { cmd: 'new a tag "Docs" attributes:{href:#, class:btn}', label: 'new link' },
+            { cmd: 'new button tag "Click" attributes:{id:btn1, class:"btn primary"}', label: 'new button' }
+          ]);
+
+          addChips('classChips', [
+            { cmd: 'class add primary rounded shadow', label: 'class add +shadow' },
+            { cmd: 'class remove rounded', label: 'class remove' },
+            { cmd: 'class toggle hidden', label: 'class toggle hidden' },
+            { cmd: 'class replace primary accent', label: 'class replace' },
+            { cmd: 'class set "card shadow p-3"', label: 'class set exactly' }
+          ]);
+
+          addChips('styleChips', [
+            { cmd: 'style "padding: 12px; color: #e2e8f0;"', label: 'style padding+color' },
+            { cmd: 'style "border: 1px solid #334155; border-radius: 8px;"', label: 'style border+radius' },
+            { cmd: 'style "background: #0b1226;"', label: 'style bg' }
+          ]);
+
+          addChips('attrChips', [
+            { cmd: 'attr set id content', label: 'attr set id' },
+            { cmd: 'attr set data-key value', label: 'attr set data-*' },
+            { cmd: 'attr set ajax sample.json', label: 'attr set ajax' },
+            { cmd: 'attr set insert centerContent', label: 'attr set insert' },
+            { cmd: 'attr del ajax', label: 'attr del ajax' }
+          ]);
+
+          addChips('renderChips', [
+            { cmd: 'render', label: 'render' },
+            { cmd: 'show working', label: 'show working' },
+            { cmd: 'export', label: 'export' },
+            { cmd: 'exportfile payload.json', label: 'export file' } // ← downloads JSON
+          ]);
+
+
+          if ($('treeChips')) {
+            addChips('treeChips', [
+              { cmd: 'tree', label: 'refresh tree', run: true },
+              { cmd: 'node addchild {"tagname":"li","textContent":"New item"}', label: 'add child <li>', run: true },
+              { cmd: 'node insertAt 0 {"tagname":"li","textContent":"Inserted at 0"}', label: 'insertAt(0) <li>', run: true },
+              { cmd: 'node settext "Hello world"', label: 'set text', run: true },
+              { cmd: 'node setattrs {"class":"card p-2"}', label: 'merge attrs', run: true },
+              { cmd: 'node wrap {"tagname":"div","attributes":{"class":"wrapper"}}', label: 'wrap', run: true },
+              { cmd: 'node replace {"tagname":"div","attributes":{"class":"box"},"0":{"tagname":"p","textContent":"Replaced"}}', label: 'replace node', run: true },
+              { cmd: 'node delete', label: 'delete node', run: true }
+            ]);
+          }
+        }
+        return { addChips, populate };
+      })();
+
+      function copyJSONToClipboard() {
+        const node = (typeof Working?.get === 'function' && Working.get()) || App.NLPGit.current();
+        const data = JSON.stringify(node, null, 2);
+        navigator.clipboard.writeText(data).then(
+          () => console.log('Copied JSON'),
+          (e) => console.warn('Copy failed:', e)
+        );
       }
 
-      $('cliRun').addEventListener('click', () => { exec1($('cliInput').value); $('cliInput').value = ''; });
-      $('cliCommit').addEventListener('click', () => { Commands.commit([$('cliInput').value || '(no message)']); $('cliInput').value = ''; });
-      $('cliRender').addEventListener('click', () => { Commands.render([]); });
-      $('cliInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); $('cliRun').click(); } });
+      // ——————————————————————————————————————————————————————
+      // Boot
+      // ——————————————————————————————————————————————————————
+      function boot() {
+        App.CLI.bind();
+        App.Actions.bind();
+        App.Chips.populate();
 
-      $('renderBtn').addEventListener('click', () => { Commands.render([]); });
+        // At boot:
+        Working.reset({ tagname: 'div', attributes: { id: App.utils.genId('node'), class: 'page' } });
+        App.NLPGit.stage({ __replace: Working.get() }, { overwrite: true }); // mirror for Inspector
+        App.UI.refreshPanels();
+        App.NLPGit.render('centerContent');
 
-      // Panel of commands (chips)
-      function addChips(containerId, items) {
-        const c = $(containerId);
-        items.forEach(({ cmd, label, title }) => {
-          const b = document.createElement('button');
-          b.className = 'chip'; b.textContent = label || cmd; if (title) b.title = title;
-          b.addEventListener('click', () => { $('cliInput').value = cmd; });
-          c.appendChild(b);
-        });
+
+        $('logPre').textContent = JSON.stringify(App.NLPGit.log(), null, 2);
+        $('status').textContent = 'repo initialized';
       }
 
-      addChips('repoChips', [
-        { cmd: 'status', label: 'status' },
-        { cmd: 'log', label: 'log' },
-        { cmd: 'diff', label: 'diff' },
-        { cmd: 'commit "update"', label: 'commit' },
-        { cmd: 'branch feature-x', label: 'branch feature-x' },
-        { cmd: 'checkout feature-x', label: 'checkout feature-x' },
-        { cmd: 'undo', label: 'undo' }
-      ]);
+      if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', boot, { once: true });
+      else boot();
 
-      addChips('nlpChips', [
-        { cmd: 'new div tag "Hello" attributes:{id:hero, class:"card"}', label: 'new div "Hello"' },
-        { cmd: 'new a tag "pipes.js" attributes:{id:"pipes.js", ajax:"h.php"}', label: 'new a ajax→href' },
-        { cmd: 'nlp "attributes:{ajax:sample.html, insert:content}"', label: 'attrs ajax/insert' },
-        { cmd: 'nlp "textContent \\"Updated\\""', label: 'textContent "Updated"' }
-      ]);
-
-      addChips('classChips', [
-        { cmd: 'class add primary rounded', label: 'class add' },
-        { cmd: 'class remove rounded', label: 'class remove' },
-        { cmd: 'class toggle shadow', label: 'class toggle' },
-        { cmd: 'class replace primary accent', label: 'class replace' },
-        { cmd: 'class set "card shadow"', label: 'class set exactly' }
-      ]);
-      addChips('styleChips', [
-        { cmd: 'style "padding: 12px; color: #e2e8f0;"', label: 'style merge' },
-        { cmd: 'style "border: 1px solid #334155;"', label: 'style border' }
-      ]);
-
-      addChips('attrChips', [
-        { cmd: 'attr set id content', label: 'attr set id' },
-        { cmd: 'attr set ajax sample.html', label: 'attr set ajax' },
-        { cmd: 'attr set insert content', label: 'attr set insert' },
-        { cmd: 'attr del ajax', label: 'attr del ajax' }
-      ]);
-
-      addChips('renderChips', [
-        { cmd: 'render', label: 'render' },
-        { cmd: 'show working', label: 'show working' },
-        { cmd: 'export', label: 'export' }
-      ]);
-
-      // Initial state print
-      $('logPre').textContent = JSON.stringify(NLPGit.log(), null, 2);
-      status.textContent = 'repo initialized';
     })(window);
+
+    // Deep-clone so we never mutate your existing object
+    function deepClone(x) { return JSON.parse(JSON.stringify(x)); }
+
+    // A valid modala node must be a single object with a tagname
+    function isModalaNode(x) {
+      return x && typeof x === 'object' && !Array.isArray(x) &&
+        typeof x.tagname === 'string' && x.tagname.length > 0;
+    }
+
+    // Path helpers (use "root/0/1" form)
+    // ---- JSON Path + operations on numeric-key children (root/0/1 form) ----
+    function splitPath(p) { return String(p || 'root').split('/').filter(Boolean); }
+    function isModalaNode(x) { return x && typeof x === 'object' && !Array.isArray(x) && typeof x.tagname === 'string' && x.tagname.length > 0; }
+
+    function getAtPath(root, path) {
+      if (!isModalaNode(root)) return null;
+      const parts = splitPath(path);
+      if (parts[0] !== 'root') return null;
+      let node = root;
+      for (const seg of parts.slice(1)) {
+        if (!/^\d+$/.test(seg) || !node[seg] || typeof node[seg] !== 'object') return null;
+        node = node[seg];
+      }
+      return node || null;
+    }
+    function setAtPath(root, path, newNode) {
+      if (!isModalaNode(root) || !isModalaNode(newNode)) return null;
+      const parts = splitPath(path);
+      if (parts[0] !== 'root') return null;
+      if (parts.length === 1) { Object.keys(root).forEach(k => delete root[k]); Object.assign(root, newNode); return 'root'; }
+      const leaf = parts.pop(); const parent = getAtPath(root, parts.join('/')); if (!parent) return null;
+      parent[leaf] = newNode; return parts.join('/') + '/' + leaf;
+    }
+    function nextChildIndex(parent) {
+      const idxs = Object.keys(parent).filter(k => /^\d+$/.test(k)).map(Number);
+      return idxs.length ? Math.max(...idxs) + 1 : 0;
+    }
+    function addChildAtPath(root, parentPath, childNode) {
+      if (!isModalaNode(root) || !isModalaNode(childNode)) return null;
+      const parent = getAtPath(root, parentPath); if (!parent) return null;
+      const i = nextChildIndex(parent); parent[String(i)] = childNode;
+      return parentPath + '/' + i;
+    }
+    function insertChildAt(root, parentPath, index, childNode) {
+      if (!isModalaNode(root) || !isModalaNode(childNode)) return null;
+      const parent = getAtPath(root, parentPath); if (!parent) return null;
+      const nums = Object.keys(parent).filter(k => /^\d+$/.test(k)).map(Number).sort((a, b) => a - b);
+      const max = nums.length ? Math.max(...nums) : -1;
+      for (let k = max; k >= index; k--) {
+        if (parent.hasOwnProperty(String(k))) parent[String(k + 1)] = parent[String(k)];
+      }
+      parent[String(index)] = childNode;
+      return parentPath + '/' + index;
+    }
+    function renumberChildren(node) {
+      const nums = Object.keys(node).filter(k => /^\d+$/.test(k)).map(Number).sort((a, b) => a - b);
+      const vals = nums.map(k => node[String(k)]);
+      nums.forEach(k => delete node[String(k)]);
+      vals.forEach((v, i) => { node[String(i)] = v; });
+    }
+    function deleteAtPath(root, path) {
+      const parts = splitPath(path); if (parts[0] !== 'root') return null;
+      if (parts.length === 1) return 'root';
+      const leaf = parts.pop(); const parentPath = parts.join('/'); const parent = getAtPath(root, parentPath);
+      if (!parent) return null; delete parent[leaf]; renumberChildren(parent); return parentPath;
+    }
+    function wrapAtPath(root, path, wrapperNode) {
+      if (!isModalaNode(wrapperNode)) return null;
+      const old = getAtPath(root, path); if (!old) return null;
+      const wrapped = JSON.parse(JSON.stringify(wrapperNode)); wrapped['0'] = old;
+      return setAtPath(root, path, wrapped);
+    }
+    function setTextAtPath(root, path, text) {
+      const node = getAtPath(root, path); if (!node) return false;
+      delete node.innerHTML; delete node.innerText; node.textContent = String(text == null ? '' : text); return true;
+    }
+    function setAttrsAtPath(root, path, attrs) {
+      const node = getAtPath(root, path); if (!node) return false;
+      node.attributes = { ...(node.attributes || {}), ...(attrs || {}) }; return true;
+    }
+
+    // parentPath like "root" or "root/0/1"
+    // pass either { child } to append, or { child, index } to insert at a specific index
+    function recreateWithInsert(currentJson, parentPath, { child, index } = {}) {
+      if (!isModalaNode(currentJson)) throw new Error('Current payload is not a modala node (must have tagname).');
+      if (!isModalaNode(child)) throw new Error('Child must be a modala node (must have tagname).');
+
+      const clone = deepClone(currentJson);
+      const p = String(parentPath || 'root');
+
+      let newPath;
+      if (typeof index === 'number' && index >= 0) {
+        newPath = insertChildAt(clone, p, index, child);
+      } else {
+        newPath = addChildAtPath(clone, p, child);
+      }
+      if (!newPath) throw new Error('Invalid parent path: ' + p);
+
+      return { json: clone, insertedPath: newPath };
+    }
+
+    function downloadJSON(obj, filename = 'payload.json') {
+      const data = JSON.stringify(obj, null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click();
+      a.remove(); URL.revokeObjectURL(url);
+    }
+
+
   </script>
+
 </body>
 
 </html>
